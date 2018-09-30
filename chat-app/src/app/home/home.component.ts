@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   public user;
   public selectedGroup;
   public selectedChannel;
-  public groups = [];
+  public groups: any;
   public channels = [];
   public newGroupName:String
 
@@ -25,8 +25,10 @@ export class HomeComponent implements OnInit {
       let user = JSON.parse(sessionStorage.getItem('user'));
       this.user = user;
       console.log(this.user);
-      this.getGroups();
+      this.groups = this.user.groups;
       if(this.groups.length > 0){
+        console.log("WTF?")
+        console.log(this.groups);
         this.openGroup(this.groups[0].name);
         if(this.groups[0].channels > 0){
           this.channelChangedHandler(this.groups[0].channels[0].name);
@@ -63,11 +65,10 @@ export class HomeComponent implements OnInit {
     let data = {
       'username': JSON.parse(sessionStorage.getItem('user')).username
     }
-    this._groupService.getGroups(data).subscribe(
-      d=>{
+    this._groupService.getGroups(data).subscribe(groups => {
         console.log('getGroups()');
-        console.log(d);
-        this.groups = d['groups'];
+        console.log(groups);
+        this.groups = groups;
       },
       error => {
         console.error(error);

@@ -43,6 +43,36 @@ app.get('*', function(req, res) {
 const login = require('./login.js')();
 const groups = require('./groups.js')();
 
+// create some test data
+// mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+//   if (err) {
+//     console.log(err);
+//     res.status(500).end();
+//   }
+//   // Connected now setup db for query
+//   const db = client.db(dbName);
+//   db.collection("groups").drop();
+//   db.collection("groups").insertOne(
+//     {
+//       name: "Group 01",
+//       admins: ["super"],
+//       members: ["super", "carl"],
+//       channels: [{
+//         name: "Channel 01",
+//         members: ["super", "carl"],
+//         history: ["hello"]
+//       },{
+//         name: "Channel 02",
+//         members: ["super"],
+//         history: ["bye"]
+//       }]
+//     },
+//     (err, res) => {
+//       console.log(res);
+//   });
+//   client.close();
+// });
+
 app.post('/api/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
@@ -56,12 +86,28 @@ app.post('/api/login', function(req, res){
     // find user with username x and password y
     db.collection("users").findOne({'username': username}, (err, result) => {
       if (result.password == password) {
-        res.send(result);
+        db.collection("groups").find({'members': username}).toArray((err, groups) => {
+          if (err) {
+            console.log(err);
+            res.status(500).end();
+          }
+          result.groups = groups;
+          for (var i = 0; i < groups.length; i++) {
+            if (groups[i].admins.includes(result.username)) {
+              groups[i].role = 1;
+            } else {
+              groups[i].role = 0;
+            }
+          }
+          res.send(result);
+          client.close();
+        });
       } else {
         res.send(false);
+        client.close();
       }
     });
-    client.close();
+
   });
 });
 
@@ -69,18 +115,26 @@ app.post('/api/login', function(req, res){
 // Group APIs
 app.post('/api/groups', function(req,res){
     // We want to authenticate again -- usually you'd use a token
-    fs.readFile(dataFile, dataFormat, function(err, data){
-        data = JSON.parse(data);
-        let username = req.body.username;
-        login.data = data;
-        let match = login.findUser(username);
-
-        // Check to see if we got a match, get groups if true
-        if(match !== false){
-            groups.data = data;
-            match.groups = groups.getGroups(username, match.permissions);
+    let username = req.body.username;
+    mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      // Connected now setup db for query
+    	const db = client.db(dbName);
+      // find user with username x and password y
+      db.collection("groups").find({'members': username}).toArray((err, groups) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
         }
-        res.send(match);
+        console.log(groups);
+        res.send(groups);
+        client.close();
+      });
+
+
     });
 });
 
@@ -88,19 +142,7 @@ app.delete('/api/group/delete/:groupname', function(req, res){
     let groupName = req.params.groupname;
 
     // Read the JSON file to get the current data
-    fs.readFile(dataFile, dataFormat, function(err, data){
-        let readData = JSON.parse(data);
-        groups.data = readData.groups;
-        readData.groups = groups.deleteGroup(groupName);
-        console.log(readData);
-        let json = JSON.stringify(readData);
 
-        // Write the updated data to JSON
-        fs.writeFile(dataFile, json, dataFormat, function(err, d){
-            res.send(true);
-            console.log("Deleted group: " + groupName);
-        });
-    });
 });
 
 app.post('/api/group/create', function(req, res){
@@ -109,25 +151,7 @@ app.post('/api/group/create', function(req, res){
         res.send(false);
     } else {
         // Read the JSON file to get an updated list of groups
-        fs.readFile(dataFile, dataFormat, function(err, data){
-            let readData = JSON.parse(data);
-            let g = readData.groups;
 
-            let newGroup = {
-                'name': req.body.newGroupName,
-                'admins':[],
-                'members':[]
-            }
-            g.push(newGroup)
-            readData.groups = g;
-            let json = JSON.stringify(readData);
-
-            // Write the updated data to the JSON file.
-            fs.writeFile(dataFile, json, dataFormat, function(err, data){
-                res.send(true);
-                console.log("Created new group: " + req.body.newGroupName);
-            });
-        });
     }
 })
 
