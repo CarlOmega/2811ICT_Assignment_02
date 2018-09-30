@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongodb = require('mongodb');
+const url = 'mongodb://localhost:27017';
+const dbName = 'chatDatabase';
 const path = require('path');
-const app = express(); 
+const app = express();
 const fs = require('fs');
 const dataFile = './data.json';
 const dataFormat = 'utf8';
@@ -9,13 +12,13 @@ const dataFormat = 'utf8';
 
 // CORS
 // We are enabling CORS so that our 'ng serve' Angular server can still access
-// our Node server. 
-const cors = require('cors')
+// our Node server.
+const cors = require('cors');
 var corsOptions = {
   origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 
 
@@ -24,12 +27,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Basic Routes
-app.use(express.static(path.join(__dirname, '../angular-app/dist/angular-app')));
+app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname,'../angular-app/dist/angular-app/index.html'))
+  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
 });
 app.get('/home', function(req,res){
-    res.sendFile(path.join(__dirname,'../angular-app/dist/angular-app/index.html'))
+  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+});
+app.get('*', function(req, res) {
+  res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
 });
 
 
@@ -38,20 +44,25 @@ const login = require('./login.js')();
 const groups = require('./groups.js')();
 
 app.post('/api/login', function(req, res){
-    fs.readFile(dataFile, dataFormat, function(err, data){
-        data = JSON.parse(data);
-        let username = req.body.username; 
-        login.data = data;
-        let match = login.findUser(username);
-    
-        // Check to see if we have a match, get groups if true
-        if(match !== false){
-            groups.data = data;
-            match.groups = groups.getGroups(username, match.permissions);
-        }
-        console.log(match.groups[0].channels[0])
-        res.send(match);
+  let username = req.body.username;
+  let password = req.body.password;
+  mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    }
+    // Connected now setup db for query
+  	const db = client.db(dbName);
+    // find user with username x and password y
+    db.collection("users").findOne({'username': username}, (err, result) => {
+      if (result.password == password) {
+        res.send(result);
+      } else {
+        res.send(false);
+      }
     });
+    client.close();
+  });
 });
 
 
@@ -60,10 +71,10 @@ app.post('/api/groups', function(req,res){
     // We want to authenticate again -- usually you'd use a token
     fs.readFile(dataFile, dataFormat, function(err, data){
         data = JSON.parse(data);
-        let username = req.body.username; 
+        let username = req.body.username;
         login.data = data;
         let match = login.findUser(username);
-        
+
         // Check to see if we got a match, get groups if true
         if(match !== false){
             groups.data = data;
@@ -101,7 +112,7 @@ app.post('/api/group/create', function(req, res){
         fs.readFile(dataFile, dataFormat, function(err, data){
             let readData = JSON.parse(data);
             let g = readData.groups;
-    
+
             let newGroup = {
                 'name': req.body.newGroupName,
                 'admins':[],
@@ -110,7 +121,7 @@ app.post('/api/group/create', function(req, res){
             g.push(newGroup)
             readData.groups = g;
             let json = JSON.stringify(readData);
-            
+
             // Write the updated data to the JSON file.
             fs.writeFile(dataFile, json, dataFormat, function(err, data){
                 res.send(true);
@@ -119,7 +130,7 @@ app.post('/api/group/create', function(req, res){
         });
     }
 })
- 
+
 
 
 // HTTP Listener

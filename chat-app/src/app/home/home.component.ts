@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
       let user = JSON.parse(sessionStorage.getItem('user'));
       this.user = user;
       console.log(this.user);
-      this.groups = user.groups;
+      this.getGroups();
       if(this.groups.length > 0){
         this.openGroup(this.groups[0].name);
         if(this.groups[0].channels > 0){
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
     event.preventDefault();
     let data = {'newGroupName': this.newGroupName};
     this._groupService.createGroup(data).subscribe(
-      data => { 
+      data => {
         console.log(data);
         this.getGroups();
       },
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
         console.log('getGroups()');
         console.log(d);
         this.groups = d['groups'];
-      }, 
+      },
       error => {
         console.error(error);
       }
@@ -103,6 +103,7 @@ export class HomeComponent implements OnInit {
     }
     return found;
   }
+
   getChannels(groupName){
     let channels = [];
     return channels;
