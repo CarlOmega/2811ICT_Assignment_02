@@ -39,11 +39,14 @@ export class HomeComponent implements OnInit {
 
   createGroup(event){
     event.preventDefault();
-    let data = {'newGroupName': this.newGroupName};
+    let data = {
+      'newGroupName': this.newGroupName,
+      'username': this.user.username
+    };
     this._groupService.createGroup(data).subscribe(
-      data => {
-        console.log(data);
-        this.getGroups();
+      newGroup => {
+        console.log(newGroup);
+        this.groups.push(newGroup);
       },
       error => {
         console.error(error);

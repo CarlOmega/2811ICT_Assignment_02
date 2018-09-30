@@ -144,13 +144,13 @@ app.post('/api/groups', function(req,res){
 
 app.delete('/api/group/delete/:groupname', function(req, res){
     let groupName = req.params.groupname;
-
     // Read the JSON file to get the current data
 
 });
 
 app.post('/api/group/create', function(req, res){
-    let groupName = req.body.newGroupName
+    let groupName = req.body.newGroupName;
+    let username = req.body.username;
     if(groupName == '' || groupName == 'undefined' || groupName == null){
         res.send(false);
     } else {
@@ -162,15 +162,16 @@ app.post('/api/group/create', function(req, res){
           }
           // Connected now setup db for query
           const db = client.db(dbName);
-          db.collection("groups").insertOne(
-            {
-              name: groupName,
-              admins: ["super"],
-              members: ["super", "carl"],
-              channels: []
-            },
-            (err, res) => {
+          let newGroup = {
+            name: groupName,
+            admins: [username],
+            members: [username],
+            channels: []
+          };
+          db.collection("groups").insertOne(newGroup, (err, result) => {
               console.log("Created group");
+              newGroup.role = 1;
+              res.send(newGroup);
           });
           client.close();
         });

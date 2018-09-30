@@ -90,9 +90,11 @@
         </ng-container>
       </div>
     </div>
+
+    <!-- Groups settings for admin-->
     <div class="row" style="width: 100%">
       <!-- Groups -->
-      <div class="col-lg-2" style="padding:0px" *ngIf="selectedGroup">
+      <div class="col-lg-2" style="padding:0px" *ngIf="selectedGroup && selectedGroup.role > 0">
         <div class="card mb-3" style="padding:10px">
           <h3 class="card-header">Group Settings</h3>
           <div class="card-body" style="height: 500px; overflow-y:hidden">
