@@ -94,32 +94,34 @@
     <!-- Groups settings for admin-->
     <div class="row" style="width: 100%">
       <!-- Groups -->
-      <div class="col-lg-2" style="padding:0px" *ngIf="selectedGroup && selectedGroup.role > 0">
-        <div class="card mb-3" style="padding:10px">
-          <h3 class="card-header">Group Settings</h3>
-          <div class="card-body" style="height: 500px; overflow-y:scroll">
-            <h4>{{selectedGroup.name}}</h4>
-            <h6>All Members</h6>
-            <ul class="list-group" *ngFor="let member of selectedGroup.members">
-              <li class="list-group-item list-group-item-info">{{member}}</li>
-            </ul>
-            <h6>Promote to {{selectedGroup.name}} admin:</h6>
-            <div *ngFor="let member of selectedGroup.members">
-              <button *ngIf="!(selectedGroup.admins.includes(member))" class="btn-success" style="width:100%">{{member}}</button>
-            </div>
-            <h6>Kick from {{selectedGroup.name}}</h6>
-            <div *ngFor="let member of selectedGroup.members">
-              <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
-            </div>
-            <h6>Add user to {{selectedGroup.name}}</h6>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Username">
-              <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button">Add</button>
+      <div class="col-lg-2" style="padding:0px">
+        <div *ngIf="selectedGroup && selectedGroup.role > 0">
+          <div class="card mb-3" style="padding:10px">
+            <h3 class="card-header">Group Settings</h3>
+            <div class="card-body" style="height: 500px; overflow-y:scroll">
+              <h4>{{selectedGroup.name}}</h4>
+              <h6>All Members</h6>
+              <ul class="list-group" *ngFor="let member of selectedGroup.members">
+                <li class="list-group-item list-group-item-info">{{member}}</li>
+              </ul>
+              <h6>Promote to {{selectedGroup.name}} admin:</h6>
+              <div *ngFor="let member of selectedGroup.members">
+                <button *ngIf="!(selectedGroup.admins.includes(member))" class="btn-success" style="width:100%">{{member}}</button>
+              </div>
+              <h6>Kick from {{selectedGroup.name}}</h6>
+              <div *ngFor="let member of selectedGroup.members">
+                <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
+              </div>
+              <h6>Add user to {{selectedGroup.name}}</h6>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Username">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="button">Add</button>
+                </div>
               </div>
             </div>
+            <button *ngIf="selectedGroup.role > 0"  (click)="deleteGroup(selectedGroup.name)" class="btn-danger col-lg-12" style="width:100%">Delete {{selectedGroup.name}}</button>
           </div>
-          <button *ngIf="selectedGroup.role > 0"  (click)="deleteGroup(selectedGroup.name)" class="btn-danger col-lg-12" style="width:100%">Delete {{selectedGroup.name}}</button>
         </div>
       </div>
       <!-- Channels Column -->
@@ -133,7 +135,7 @@
               <li class="list-group-item list-group-item-info">{{member}}</li>
             </ul>
             <h6>Kick from {{selectedChannel.name}}</h6>
-            <div *ngFor="let member of selectedGroup.members">
+            <div *ngFor="let member of selectedChannel.members">
               <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
             </div>
             <h6>Add user to {{selectedChannel.name}}</h6>

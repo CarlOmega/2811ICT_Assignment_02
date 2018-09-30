@@ -137,14 +137,29 @@ app.post('/api/groups', function(req,res){
         res.send(groups);
         client.close();
       });
-
-
     });
 });
 
 app.delete('/api/group/delete/:groupname', function(req, res){
     let groupName = req.params.groupname;
-    // Read the JSON file to get the current data
+    mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      // Connected now setup db for query
+    	const db = client.db(dbName);
+      // find user with username x and password y
+      db.collection("groups").deleteOne({'name':groupName}, (err, groups) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
+        }
+        console.log("Deleted group");
+        res.send(true);
+        client.close();
+      });
+    });
 
 });
 

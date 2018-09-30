@@ -46,9 +46,10 @@ export class HomeComponent implements OnInit {
     };
     this._groupService.createGroup(data).subscribe(
       newGroup => {
-        console.log(newGroup);
-        this.groups.push(newGroup);
-        sessionStorage.setItem('user', JSON.stringify(this.user));
+        if (newGroup){
+          this.groups.push(newGroup);
+          sessionStorage.setItem('user', JSON.stringify(this.user));
+        }
       },
       error => {
         console.error(error);
@@ -66,9 +67,10 @@ export class HomeComponent implements OnInit {
       };
       this._groupService.createChannel(data).subscribe(
         newChannel => {
-          console.log(newChannel);
-          this.selectedGroup.channels.push(newChannel);
-          sessionStorage.setItem('user', JSON.stringify(this.user));
+          if (newChannel) {
+            this.selectedGroup.channels.push(newChannel);
+            sessionStorage.setItem('user', JSON.stringify(this.user));
+          }
         },
         error => {
           console.error(error);
@@ -90,7 +92,22 @@ export class HomeComponent implements OnInit {
   deleteGroup(groupName){
     this._groupService.deleteGroup(groupName, this.user.username).subscribe(
       data=>{
-        this.getGroups();
+        this.selectedChannel = null;
+        for (var i =0; i < this.groups.length; i++) {
+          if (this.groups[i].name == groupName) {
+            this.groups.splice(i, 1);
+            break;
+          }
+        }
+        if (this.groups.length > 0) {
+          this.openGroup(this.groups[0].name);
+          if(this.groups[0].channels > 0){
+            this.channelChangedHandler(this.groups[0].channels[0].name);
+          }
+        } else {
+          this.selectedGroup = null;
+        }
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       }, error =>{
         console.error(error)
       }
