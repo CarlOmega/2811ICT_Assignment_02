@@ -49,7 +49,8 @@
             <!-- List of Groups -->
             <div class="row" *ngFor="let group of groups">
                 <button type="button" *ngIf="group.role == 0" (click)="openGroup(group.name)" class="btn btn-outline-success col-lg-12">{{ group.name }}</button>
-                <button type="button" *ngIf="group.role >= 1" (click)="openGroup(group.name)" class="btn btn-outline-primary col-lg-10">{{ group.name }}</button>
+                <button type="button" *ngIf="group.role >= 1" (click)="openGroup(group.name)" class="btn btn-outline-primary col-lg-8">{{ group.name }}</button>
+                <button type="button" class="btn btn-success col-lg-2" (click)="addAdmin(group.name)" *ngIf="group.role >= 1">+</button>
                 <button type="button" class="btn btn-danger col-lg-2" (click)="deleteGroup(group.name)" *ngIf="group.role >= 1">-</button>
             </div>
           </div>
@@ -90,6 +91,16 @@
               {{ member }}
             </p>
         </ng-container>
+      </div>
+    </div>
+    <div class="row" style="width: 100%">
+      <!-- Groups -->
+      <div class="col-lg-2" style="padding:0px">
+        <h2>Group Setings</h2>
+      </div>
+      <!-- Channels Column -->
+      <div class="col-lg-2" style="padding:0px">
+        <h2>Channel Setings</h2>
       </div>
     </div>
 </div>

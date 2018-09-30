@@ -97,7 +97,7 @@ app.post('/api/login', function(req, res){
           }
           result.groups = groups;
           for (var i = 0; i < groups.length; i++) {
-            if (groups[i].admins.includes(result.username)) {
+            if (groups[i].admins.includes(result.username) || result.permissions == 2) {
               groups[i].role = 1;
             } else {
               groups[i].role = 0;
@@ -155,7 +155,25 @@ app.post('/api/group/create', function(req, res){
         res.send(false);
     } else {
         // Read the JSON file to get an updated list of groups
-
+        mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+          if (err) {
+            console.log(err);
+            res.status(500).end();
+          }
+          // Connected now setup db for query
+          const db = client.db(dbName);
+          db.collection("groups").insertOne(
+            {
+              name: groupName,
+              admins: ["super"],
+              members: ["super", "carl"],
+              channels: []
+            },
+            (err, res) => {
+              console.log("Created group");
+          });
+          client.close();
+        });
     }
 })
 

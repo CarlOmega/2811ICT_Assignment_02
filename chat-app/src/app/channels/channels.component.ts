@@ -17,7 +17,7 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     var temp = [];
     for (var i = 0; i < this.channels.length; i++) {
-      if (this.channels[i].members.includes(this.user.username)) {
+      if (this.channels[i].members.includes(this.user.username) || this.group.role > 0) {
         temp.push(this.channels[i]);
       }
     }
