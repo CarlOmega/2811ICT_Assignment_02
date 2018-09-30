@@ -48,10 +48,7 @@
 
             <!-- List of Groups -->
             <div class="row" *ngFor="let group of groups">
-                <button type="button" *ngIf="group.role == 0" (click)="openGroup(group.name)" class="btn btn-outline-success col-lg-12">{{ group.name }}</button>
-                <button type="button" *ngIf="group.role >= 1" (click)="openGroup(group.name)" class="btn btn-outline-primary col-lg-8">{{ group.name }}</button>
-                <button type="button" class="btn btn-success col-lg-2" (click)="addAdmin(group.name)" *ngIf="group.role >= 1">+</button>
-                <button type="button" class="btn btn-danger col-lg-2" (click)="deleteGroup(group.name)" *ngIf="group.role >= 1">-</button>
+                <button type="button" (click)="openGroup(group.name)" class="btn btn-outline-primary col-lg-12">{{ group.name }}</button>
             </div>
           </div>
         </div>
@@ -95,12 +92,56 @@
     </div>
     <div class="row" style="width: 100%">
       <!-- Groups -->
-      <div class="col-lg-2" style="padding:0px">
-        <h2>Group Setings</h2>
+      <div class="col-lg-2" style="padding:0px" *ngIf="selectedGroup">
+        <div class="card mb-3" style="padding:10px">
+          <h3 class="card-header">Group Settings</h3>
+          <div class="card-body" style="height: 500px; overflow-y:hidden">
+            <h4>{{selectedGroup.name}}</h4>
+            <h5>Promote to {{selectedGroup.name}} admin:</h5>
+            <div *ngFor="let member of selectedGroup.members">
+              <button *ngIf="!(selectedGroup.admins.includes(member))" class="btn-success" style="width:100%">{{member}}</button>
+            </div>
+            <h5>Kick from {{selectedGroup.name}}</h5>
+            <div *ngFor="let member of selectedGroup.members">
+              <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
+            </div>
+            <h5>Add user to {{selectedGroup.name}}</h5>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Username">
+              <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+          <button *ngIf="selectedGroup.role > 0" class="btn-danger col-lg-12" style="width:100%">Delete {{selectedGroup.name}}</button>
+        </div>
       </div>
       <!-- Channels Column -->
       <div class="col-lg-2" style="padding:0px">
-        <h2>Channel Setings</h2>
+        <div class="card mb-4" style="padding:10px" *ngIf="selectedChannel">
+          <h3 class="card-header">Channel Settings</h3>
+          <div class="card-body" style="height: 500px; overflow-y:hidden">
+            <h4>{{selectedChannel.name}}</h4>
+            <h5>Kick from {{selectedChannel.name}}</h5>
+            <div *ngFor="let member of selectedGroup.members">
+              <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
+            </div>
+            <h5>Add user to {{selectedChannel.name}}</h5>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Username">
+              <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+          <button *ngIf="selectedGroup.role > 0" class="btn-danger col-lg-12" style="width:100%">Delete {{selectedChannel.name}}</button>
+        </div>
+      </div>
+
+      <div class="col-lg-8" style="padding:0px">
+        <div class="card mb-4" style="padding:10px">
+          <h3 class="card-header">User Settings</h3>
+        </div>
       </div>
     </div>
 </div>
