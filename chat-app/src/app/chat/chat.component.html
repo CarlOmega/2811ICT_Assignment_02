@@ -11,11 +11,13 @@
   </div>
 
   <div *ngIf="channel != null">
-    <h3 class="card-header">{{channel.name}}</h3>
-    <div *ngFor="let message of channel.history" class="card-body" style="height: 500px; overflow-y:scroll">
-      <p class="card-text">
-        {{message}}
-      </p>
+    <h3 class="card-header">{{channel ?channel.name : Chat}}</h3>
+    <div class="card-body" style="height: 500px; overflow-y:scroll">
+      <div *ngFor="let message of channel.history">
+        <p class="card-text">
+          {{message}}
+        </p>
+      </div>
     </div>
   </div>
 

@@ -176,7 +176,36 @@ app.post('/api/group/create', function(req, res){
           client.close();
         });
     }
-})
+});
+
+app.post('/api/channel/create', function(req, res){
+    let groupName = req.body.groupName;
+    let username = req.body.username;
+    let channelName = req.body.newChannelName;
+    if(channelName == '' || channelName == 'undefined' || channelName == null){
+        res.send(false);
+    } else {
+        // Read the JSON file to get an updated list of groups
+        mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+          if (err) {
+            console.log(err);
+            res.status(500).end();
+          }
+          // Connected now setup db for query
+          const db = client.db(dbName);
+          let newChannel = {
+            name: channelName,
+            members: [username],
+            history: []
+          };
+          db.collection("groups").updateOne({'name': groupName}, {$push: {channels: newChannel}}, (err, result) => {
+              console.log("Created group");
+              res.send(newChannel);
+          });
+          client.close();
+        });
+    }
+});
 
 
 

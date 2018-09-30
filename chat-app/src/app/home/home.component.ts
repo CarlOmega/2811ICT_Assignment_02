@@ -13,7 +13,8 @@ export class HomeComponent implements OnInit {
   public selectedChannel;
   public groups: any;
   public channels = [];
-  public newGroupName:String
+  public newGroupName: String;
+  public newChannelName: String;
 
   constructor(private router: Router, private _groupService:GroupService) { }
 
@@ -47,9 +48,41 @@ export class HomeComponent implements OnInit {
       newGroup => {
         console.log(newGroup);
         this.groups.push(newGroup);
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       },
       error => {
         console.error(error);
+      }
+    )
+  }
+
+  createChannel(event){
+    event.preventDefault();
+    if (this.selectedGroup) {
+      let data = {
+        'groupName': this.selectedGroup.name,
+        'newChannelName': this.newChannelName,
+        'username': this.user.username
+      };
+      this._groupService.createChannel(data).subscribe(
+        newChannel => {
+          console.log(newChannel);
+          this.selectedGroup.channels.push(newChannel);
+          sessionStorage.setItem('user', JSON.stringify(this.user));
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    }
+  }
+
+  deleteChannel(channelName){
+    this._groupService.deleteGroup(channelName, this.user.username).subscribe(
+      data=>{
+        this.getGroups();
+      }, error =>{
+        console.error(error)
       }
     )
   }
@@ -72,6 +105,7 @@ export class HomeComponent implements OnInit {
         console.log('getGroups()');
         console.log(groups);
         this.groups = groups;
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       },
       error => {
         console.error(error);
@@ -94,7 +128,6 @@ export class HomeComponent implements OnInit {
     }
     this.channels = this.selectedGroup.channels;
   }
-
 
   // Responsible for handling the event call by the child component
   channelChangedHandler(name){
