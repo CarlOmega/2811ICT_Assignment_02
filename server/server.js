@@ -160,7 +160,31 @@ app.delete('/api/group/delete/:groupname', function(req, res){
         client.close();
       });
     });
+});
 
+app.delete('/api/channel/delete/', function(req, res){
+    let channelName = req.query.channelName;
+    let groupName = req.query.groupName;
+    console.log(channelName+ " " + groupName);
+    mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      // Connected now setup db for query
+    	const db = client.db(dbName);
+      // find user with username x and password y
+      db.collection("groups").update({'name':groupName},
+      {$pull: {channels: {name: channelName}}}, (err, groups) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
+        }
+        console.log("Deleted Channel");
+        res.send(true);
+        client.close();
+      });
+    });
 });
 
 app.post('/api/group/create', function(req, res){
@@ -213,8 +237,8 @@ app.post('/api/channel/create', function(req, res){
             members: [username],
             history: []
           };
-          db.collection("groups").updateOne({'name': groupName}, {$push: {channels: newChannel}}, (err, result) => {
-              console.log("Created group");
+          db.collection("groups").updateOne({'name': groupName} , {$push: {channels: newChannel}}, (err, result) => {
+              console.log("Created channel");
               res.send(newChannel);
           });
           client.close();

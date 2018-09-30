@@ -4,7 +4,7 @@
 // ============================================
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 
 const httpOptions = {
@@ -31,6 +31,12 @@ export class GroupService {
 
   deleteGroup(groupName, username){
     return this.http.delete(this.api + 'group/delete/' + groupName);
+  }
+
+  deleteChannel(channelName, groupName){
+    let params = new HttpParams().set('channelName', channelName).set('groupName', groupName);
+
+    return this.http.delete(this.api + 'channel/delete/', {params: params});
   }
 
   getGroups(data){

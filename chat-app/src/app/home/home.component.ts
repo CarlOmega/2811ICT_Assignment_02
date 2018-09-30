@@ -80,9 +80,17 @@ export class HomeComponent implements OnInit {
   }
 
   deleteChannel(channelName){
-    this._groupService.deleteGroup(channelName, this.user.username).subscribe(
+    this._groupService.deleteChannel(channelName, this.selectedGroup.name).subscribe(
       data=>{
-        this.getGroups();
+        this.selectedChannel = null;
+        for (var i =0; i < this.selectedGroup.channels.length; i++) {
+          if (this.selectedGroup.channels[i].name == channelName) {
+            this.selectedGroup.channels.splice(i, 1);
+            break;
+          }
+        }
+        this.channels = this.selectedGroup.channels;
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       }, error =>{
         console.error(error)
       }
