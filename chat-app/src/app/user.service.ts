@@ -1,11 +1,11 @@
 // ============================================
-// This service is responsible for CRUD actions 
+// This service is responsible for CRUD actions
 // to the user APIs
 // ============================================
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

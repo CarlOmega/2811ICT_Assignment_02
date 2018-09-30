@@ -10,6 +10,10 @@ import { HomeComponent } from './home/home.component';
 import { ChannelsComponent } from './channels/channels.component';
 import { ChatComponent } from './chat/chat.component';
 
+import { SocketService } from './socket.service';
+import { GroupService } from './group.service';
+import { UserService } from './user.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +28,7 @@ import { ChatComponent } from './chat/chat.component';
     AppRoutingModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [SocketService, UserService, GroupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { GroupService } from '../group.service';
+import { SocketService } from '../socket.service';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit {
   public newGroupName: String;
   public newChannelName: String;
 
-  constructor(private router: Router, private _groupService:GroupService) { }
+  constructor(private router: Router, private _groupService: GroupService, socketService: SocketService) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user') === null){
@@ -139,6 +140,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout(){
+    
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }

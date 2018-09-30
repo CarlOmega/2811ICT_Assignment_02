@@ -9,6 +9,13 @@ const fs = require('fs');
 const dataFile = './data.json';
 const dataFormat = 'utf8';
 
+const http = require('http');
+const server = http.Server(app);
+const socketIO = require('socket.io');
+const io = socketIO(server);
+require('./socket.js')(app, io);
+
+
 
 // CORS
 // We are enabling CORS so that our 'ng serve' Angular server can still access
@@ -16,7 +23,8 @@ const dataFormat = 'utf8';
 const cors = require('cors');
 var corsOptions = {
   origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
 }
 app.use(cors(corsOptions));
 
@@ -27,51 +35,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Basic Routes
-app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
-});
-app.get('/home', function(req,res){
-  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
-});
-app.get('*', function(req, res) {
-  res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
-});
+// app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+// });
+// app.get('/home', function(req,res){
+//   res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+// });
+// app.get('*', function(req, res) {
+//   res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
+// });
 
 
 // Login Module
 const login = require('./login.js')();
 const groups = require('./groups.js')();
-
-// create some test data
-// mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
-//   if (err) {
-//     console.log(err);
-//     res.status(500).end();
-//   }
-//   // Connected now setup db for query
-//   const db = client.db(dbName);
-//   db.collection("groups").drop();
-//   db.collection("groups").insertOne(
-//     {
-//       name: "Group 01",
-//       admins: ["super"],
-//       members: ["super", "carl"],
-//       channels: [{
-//         name: "Channel 01",
-//         members: ["super", "carl"],
-//         history: ["hello"]
-//       },{
-//         name: "Channel 02",
-//         members: ["carl"],
-//         history: ["bye"]
-//       }]
-//     },
-//     (err, res) => {
-//       console.log(res);
-//   });
-//   client.close();
-// });
 
 app.post('/api/login', function(req, res){
   let username = req.body.username;
@@ -248,8 +226,10 @@ app.post('/api/channel/create', function(req, res){
 
 
 
+
+
 // HTTP Listener
-app.listen(3000, function(){
+server.listen(3000, function(){
     console.log('Server runing');
 })
 module.exports = app;
