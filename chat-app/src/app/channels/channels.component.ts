@@ -9,11 +9,19 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ChannelsComponent implements OnInit {
   @Input() channels;
   @Input() group;
+  @Input() user;
   @Output() channelChanged: EventEmitter<string> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+    var temp = [];
+    for (var i = 0; i < this.channels.length; i++) {
+      if (this.channels[i].members.includes(this.user.username)) {
+        temp.push(this.channels[i]);
+      }
+    }
+    this.channels = temp;
   }
 
   changeChannel(name){

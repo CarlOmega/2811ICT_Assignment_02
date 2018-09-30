@@ -63,7 +63,7 @@ const groups = require('./groups.js')();
 //         history: ["hello"]
 //       },{
 //         name: "Channel 02",
-//         members: ["super"],
+//         members: ["carl"],
 //         history: ["bye"]
 //       }]
 //     },
@@ -86,7 +86,11 @@ app.post('/api/login', function(req, res){
     // find user with username x and password y
     db.collection("users").findOne({'username': username}, (err, result) => {
       if (result.password == password) {
-        db.collection("groups").find({'members': username}).toArray((err, groups) => {
+        var query = {'members': username};
+        if (result.permissions == 2) {
+          query = {};
+        }
+        db.collection("groups").find(query).toArray((err, groups) => {
           if (err) {
             console.log(err);
             res.status(500).end();
