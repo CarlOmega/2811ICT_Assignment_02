@@ -92,7 +92,7 @@
       <div class="col-lg-2" style="padding:0px">
         <h3 style="text-align:center; width:100%">Users Online</h3>
         <ng-container *ngIf="selectedChannel != null" >
-            <p *ngFor="let member of users">
+            <p *ngFor="let member of users" class="text-success">
               {{ member }}
             </p>
         </ng-container>
@@ -161,6 +161,23 @@
       <div class="col-lg-8" style="padding:0px">
         <div class="card mb-4" style="padding:10px" *ngIf="user.permissions > 1">
           <h3 class="card-header">User Settings</h3>
+          <div class="card-body" style="height: 500px; overflow-y:scroll">
+            <form>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username"  placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary">Create user</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

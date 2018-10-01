@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
   public messages: any;
   public obusers: any = null;
   public users: any;
+  public allusers: any;
   public messageImage: any = null;
   constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService, private _userService: UserService) { }
 
@@ -57,6 +58,7 @@ export class HomeComponent implements OnInit {
       this._userService.changeImage(userstuff).subscribe((r: any)=> {
         console.log(r);
         this.user.profile = r.url;
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       });
     });
   }

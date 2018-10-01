@@ -24,7 +24,7 @@
               <img *ngIf="!message.profile" src="messageimages\default.jpg" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
               <img *ngIf="message.profile" src="messageimages\{{message.profile}}" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
             </div>
-            <p class="card-text">{{message.message}}</p>
+            <p class="card-text text-primary">{{message.message}}</p>
           </div>
         </div>
       </div>
