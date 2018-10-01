@@ -161,16 +161,20 @@ export class HomeComponent implements OnInit {
         if(data != false){
           for (var i = 0; i < data.groups.length; i++) {
             var temp = [];
+            if (data.groups[i].name = this.selectedGroup.name) {
+              this.selectedGroup = data.groups[i];
+            }
             for (var j = 0; j < data.groups[i].channels.length; j++) {
               if (data.groups[i].channels[j].members.includes(data.username) || data.groups[i].role > 0) {
                 temp.push(data.groups[i].channels[j]);
+              }
+              if (data.groups[i].channels[j].name = this.selectedChannel.name) {
+                this.selectedChannel = data.groups[i].channels[j];
               }
             }
             data.groups[i].channels = temp;
           }
           this.groups = data.groups;
-          this.selectedGroup = null;
-          this.selectedChannel = null;
           sessionStorage.setItem('user', JSON.stringify(data));
         }
       });
