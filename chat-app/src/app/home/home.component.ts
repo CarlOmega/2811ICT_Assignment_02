@@ -16,7 +16,8 @@ export class HomeComponent implements OnInit {
   public channels = [];
   public newGroupName: String;
   public newChannelName: String;
-
+  public obmessages: any = null;
+  public messages: any;
   constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService) { }
 
   ngOnInit() {
@@ -38,6 +39,11 @@ export class HomeComponent implements OnInit {
         }
       }
     }
+  }
+
+  sendMessage(message) {
+    console.log(message);
+    this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name);
   }
 
   createGroup(event){
@@ -164,6 +170,15 @@ export class HomeComponent implements OnInit {
       if(this.channels[i].name == name){
         this.selectedChannel = this.channels[i];
         this._socketService.joinRoom(this.selectedChannel.name);
+        this.messages = this.selectedChannel.history;
+        if (this.obmessages != null) {
+          this.obmessages.unsubscribe();
+        }
+        this.obmessages = this._socketService.getMessages().subscribe((data)=> {
+          console.log(data);
+          this.messages.push(data);
+          sessionStorage.setItem('user', JSON.stringify(this.user));
+        });
         found = true;
       }
     }

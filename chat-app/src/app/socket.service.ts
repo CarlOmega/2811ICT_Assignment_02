@@ -22,7 +22,26 @@ export class SocketService {
     this.currentRoom = room;
     this.socket.emit('join room', room);
   }
-  
+
+  sendMessage(newMessage, username, groupName) {
+    let data = {
+      room: this.currentRoom,
+      message: newMessage,
+      author: username,
+      group: groupName
+    };
+    this.socket.emit('message', data);
+  }
+
+  getMessages() {
+    let obmessages = new Observable(observer => {
+      this.socket.removeAllListeners('message');
+      this.socket.on('message', (data) => {
+        observer.next(data);
+      });
+    });
+    return obmessages;
+  }
 
   signout() {
     this.currentRoom = null;

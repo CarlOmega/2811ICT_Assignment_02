@@ -13,6 +13,7 @@ import { ChatComponent } from './chat/chat.component';
 import { SocketService } from './socket.service';
 import { GroupService } from './group.service';
 import { UserService } from './user.service';
+import { ImageService } from './image.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { UserService } from './user.service';
     AppRoutingModule,
     FormsModule,
   ],
-  providers: [SocketService, UserService, GroupService],
+  providers: [SocketService, UserService, GroupService, ImageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

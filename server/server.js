@@ -8,12 +8,13 @@ const app = express();
 const fs = require('fs');
 const dataFile = './data.json';
 const dataFormat = 'utf8';
+const formidable = require('formidable');
 
 const http = require('http');
 const server = http.Server(app);
 const socketIO = require('socket.io');
 const io = socketIO(server);
-require('./socket.js')(app, io);
+require('./socket.js')(app, io, mongodb);
 
 
 
@@ -46,6 +47,24 @@ app.get('/home', function(req,res){
 //   res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
 // });
 
+// mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+//   if (err) {
+//     console.log(err);
+//     res.status(500).end();
+//   }
+//   // Connected now setup db for query
+//   const db = client.db(dbName);
+//   let user = {
+//     username: 'carl',
+//     password: '12345',
+//     email: 'carl@carl.com',
+//     permissions: 0
+//   };
+//   db.collection("users").insertOne(user, (err, result) => {
+//       console.log("Created user");
+//   });
+//   client.close();
+// });
 
 // Login Module
 const login = require('./login.js')();
@@ -90,6 +109,22 @@ app.post('/api/login', function(req, res){
       }
     });
 
+  });
+});
+
+
+app.post('', function(req,res) {
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+    var oldpath = files.filetoupload.path;
+    var newpath = './images/messageimages/' + files.filetoupload.name;
+    fs.rename(oldpath, newpath, function (err) {
+      if (err) throw err;
+      //build
+      res.send(path.join(__dirname + newpath));
+      //
+      res.end();
+    });
   });
 });
 

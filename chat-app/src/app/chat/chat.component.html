@@ -11,12 +11,17 @@
   </div>
 
   <div *ngIf="channel != null">
-    <h3 class="card-header">{{channel ?channel.name : Chat}}</h3>
+    <h3 class="card-header">{{channel ? channel.name : Chat}}</h3>
     <div class="card-body" style="height: 500px; overflow-y:scroll">
-      <div *ngFor="let message of channel.history">
-        <p class="card-text">
-          {{message}}
-        </p>
+      <div *ngFor="let message of messages">
+        <div class="card" [ngClass]="{'text-success text-right':message.author == username}" style="width: 100%;">
+          <div *ngIf="message.photo">
+          <img class="card-img-top" src="" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{message.author}}</h5>
+            <p class="card-text">{{message.message}}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,8 +29,9 @@
 
   <div class="card-footer text-muted">
     <div class="form-inline">
-        <input class="form-control" style="width:calc(100% - 100px)">
-        <button class="btn btn-primary" style="width:100px">enter</button>
+      <input type="file" name="myFile">
+      <input class="form-control" [(ngModel)]="message" [disabled]="channel == null" style="width:calc(100% - 100px)">
+      <button (click)="sendMessage()" class="btn btn-primary" [disabled]="channel == null" style="width:100px">enter</button>
     </div>
   </div>
 </div>
