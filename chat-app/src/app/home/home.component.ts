@@ -155,16 +155,27 @@ export class HomeComponent implements OnInit {
       'password': password
     }
     this._userService.create(data).subscribe((user) => {
+      if (user != false) {
+        this._userService.getUsers().subscribe((data: any) => {
+          this.allusers = data;
+        });
+      } else {
+        console.log("Cannot create that user.");
+      }
+
+    });
+  }
+
+  deleteUser(id) {
+    this._userService.delete(id).subscribe((user) => {
       this._userService.getUsers().subscribe((data: any) => {
         this.allusers = data;
       });
     });
   }
 
-
-
   deleteGroup(groupName){
-    this._groupService.deleteGroup(groupName, this.user.username).subscribe(
+    this._groupService.deleteGroup(groupName).subscribe(
       data=>{
         this.selectedChannel = null;
         for (var i =0; i < this.groups.length; i++) {

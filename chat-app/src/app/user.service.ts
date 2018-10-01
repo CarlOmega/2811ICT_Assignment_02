@@ -38,7 +38,7 @@ export class UserService {
     return this.http.post(this.api + 'user/changeimage', body, httpOptions);
   }
 
-  delete(username){
-    return this.http.delete(this.api + 'user/delete/' + username);
+  delete(id){
+    return this.http.delete(this.api + 'user/delete/' + id);
   }
 }

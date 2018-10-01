@@ -29,13 +29,12 @@ export class GroupService {
     return this.http.post(this.api + 'channel/create', body, httpOptions);
   }
 
-  deleteGroup(groupName, username){
+  deleteGroup(groupName){
     return this.http.delete(this.api + 'group/delete/' + groupName);
   }
 
   deleteChannel(channelName, groupName){
     let params = new HttpParams().set('channelName', channelName).set('groupName', groupName);
-
     return this.http.delete(this.api + 'channel/delete/', {params: params});
   }
 

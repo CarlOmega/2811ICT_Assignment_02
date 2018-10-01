@@ -167,7 +167,6 @@ app.post('/api/groups', function(req,res){
           console.log(err);
           res.status(500).end();
         }
-        console.log(groups);
         res.send(groups);
         client.close();
       });
@@ -208,8 +207,7 @@ app.delete('/api/channel/delete/', function(req, res){
       // Connected now setup db for query
     	const db = client.db(dbName);
       // find user with username x and password y
-      db.collection("groups").update({'name':groupName},
-      {$pull: {channels: {name: channelName}}}, (err, groups) => {
+      db.collection("groups").update({'name':groupName}, {$pull: {channels: {name: channelName}}}, (err, groups) => {
         if (err) {
           console.log(err);
           res.status(500).end();
@@ -241,11 +239,16 @@ app.post('/api/group/create', function(req, res){
             members: [username],
             channels: []
           };
-          db.collection("groups").insertOne(newGroup, (err, result) => {
-              console.log("Created group");
-              newGroup.role = 1;
-              res.send(newGroup);
-          });
+          if(db.collection("groups").find({name: newGroup.name}).limit(1).count()) {
+            console.log("Group taken");
+            res.send(false);
+          } else {
+            db.collection("groups").insertOne(newGroup, (err, result) => {
+                console.log("Created group");
+                newGroup.role = 1;
+                res.send(newGroup);
+            });
+          }
           client.close();
         });
     }
@@ -295,13 +298,95 @@ app.post('/api/user/create', function(req, res){
     }
     // Connected now setup db for query
     const db = client.db(dbName);
+    if(db.collection("users").find({username: newUser.username}).limit(1).count()) {
+      console.log("Username taken");
+      res.send(false);
+    } else {
+      db.collection("users").insertOne(newUser, (err, result) => {
+          console.log("Created new user");
+          res.send(newUser);
+      });
+    }
 
-    db.collection("users").insertOne(newUser, (err, result) => {
-        console.log("Created new user");
-        res.send(newUser);
-    });
     client.close();
   });
+});
+
+app.post('/api/user/change', function(req, res){
+  let type = req.body.type;
+  let username = req.body.username;
+  let groupName = req.body.groupName;
+  let channelName = req.body.channelName;
+
+  mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    }
+    // Connected now setup db for query
+    const db = client.db(dbName);
+
+    if (type == "add") {
+      if (channelName) {
+        db.collection("groups").updateOne({'name': groupName, "channels.name": channelName} , {$push: {"channels.$.members": username}}, (err, result) => {
+            console.log("Added user to channel");
+            res.send(true);
+        });
+      } else {
+        db.collection("groups").updateOne({'name': groupName} , {$push: {admins: username}}, (err, result) => {
+            console.log("Added user");
+            res.send(true);
+        });
+      }
+    }
+    if (type == "kick") {
+      if (channelName) {
+        db.collection("groups").updateOne({'name': groupName, "channels.name": channelName} , {$pull: {"channels.$.members": username}}, (err, result) => {
+            console.log("Added user to channel");
+            res.send(true);
+        });
+      } else {
+        db.collection("groups").updateOne({'name': groupName} , {$pull: {members: username}}, (err, result) => {
+            console.log("Kicked user");
+            res.send(true);
+        });
+      }
+    }
+    if (type == "promote") {
+      db.collection("groups").updateOne({'name': groupName} , {$push: {admins: username}}, (err, result) => {
+          console.log("Promoted user");
+          res.send(true);
+      });
+    }
+    if (type == "demote") {
+      db.collection("groups").updateOne({'name': groupName} , {$pull: {admins: username}}, (err, result) => {
+          console.log("Demoted user");
+          res.send(true);
+      });
+    }
+    client.close();
+  });
+});
+
+app.delete('/api/user/delete/:id', function(req, res){
+    let id = req.params.id;
+    mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      // Connected now setup db for query
+    	const db = client.db(dbName);
+      db.collection("users").deleteOne({_id: new mongodb.ObjectId(id)}, (err, user) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
+        }
+        console.log(user);
+        res.send(true);
+        client.close();
+      });
+    });
 });
 
 
