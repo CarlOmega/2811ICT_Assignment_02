@@ -35,13 +35,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Basic Routes
-// app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
-// });
-// app.get('/home', function(req,res){
-//   res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
-// });
+app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+});
+app.get('/home', function(req,res){
+  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+});
 // app.get('*', function(req, res) {
 //   res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
 // });
