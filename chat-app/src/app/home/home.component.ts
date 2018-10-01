@@ -36,7 +36,11 @@ export class HomeComponent implements OnInit {
       console.log(this.user);
       this.groups = this.user.groups;
       this._socketService.signin();
-
+      if (this.user.permissions == 2) {
+        this._userService.getUsers().subscribe((data: any) => {
+          this.allusers = data;
+        });
+      }
       if(this.groups.length > 0){
         this.openGroup(this.groups[0].name);
         if(this.groups[0].channels.length > 0){

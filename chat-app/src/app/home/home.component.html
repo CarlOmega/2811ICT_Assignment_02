@@ -177,6 +177,10 @@
               </div>
               <button type="submit" class="btn btn-primary">Create user</button>
             </form>
+            <h6>All Users</h6>
+            <ul class="list-group" *ngFor="let member of allusers">
+              <li class="list-group-item list-group-item-info">{{member.username}} | {{member.email}}</li>
+            </ul>
           </div>
         </div>
       </div>

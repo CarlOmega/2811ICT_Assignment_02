@@ -151,6 +151,29 @@ app.post('/api/user/changeimage', function(req,res) {
   });
 });
 
+app.get('/api/getusers', function(req, res){
+  let username = req.body.username;
+  let password = req.body.password;
+  mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    }
+    // Connected now setup db for query
+  	const db = client.db(dbName);
+    // find user with username x and password y
+    db.collection("users").find({}).toArray((err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      res.send(result);
+      console.log(result);
+    });
+
+  });
+});
+
 // Group APIs
 app.post('/api/groups', function(req,res){
     // We want to authenticate again -- usually you'd use a token

@@ -12,7 +12,7 @@
 
   <div *ngIf="channel != null">
     <h3 class="card-header">{{channel ? channel.name : Chat}}</h3>
-    <div class="card-body" style="height: 500px; overflow-y:scroll">
+    <div class="card-body" style="height: 500px; overflow-y:scroll" #chat id="chat">
       <div *ngFor="let message of messages">
         <div class="card"  style="width: 100%;">
           <div *ngIf="message.photo">

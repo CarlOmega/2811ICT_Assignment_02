@@ -24,6 +24,10 @@ export class UserService {
     return this.http.post(this.api + 'login', body, httpOptions);
   }
 
+  getUsers() {
+      return this.http.get(this.api + 'getusers');
+  }
+
   create(data){
     let body = JSON.stringify(data);
     return this.http.post(this.api + 'user/create', body, httpOptions);
