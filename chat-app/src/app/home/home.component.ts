@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   public newGroupName: String;
   public newChannelName: String;
 
-  constructor(private router: Router, private _groupService: GroupService, socketService: SocketService) { }
+  constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user') === null){
@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
       this.user = user;
       console.log(this.user);
       this.groups = this.user.groups;
+      this._socketService.signin();
       if(this.groups.length > 0){
         console.log("WTF?")
         console.log(this.groups);
@@ -140,7 +141,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout(){
-    
+    this._socketService.signout();
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }
@@ -162,6 +163,7 @@ export class HomeComponent implements OnInit {
     for(let i = 0; i < this.channels.length; i++){
       if(this.channels[i].name == name){
         this.selectedChannel = this.channels[i];
+        this._socketService.joinRoom(this.selectedChannel.name);
         found = true;
       }
     }

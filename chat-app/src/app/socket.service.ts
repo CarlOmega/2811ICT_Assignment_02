@@ -9,12 +9,17 @@ export class SocketService {
   private url = 'http://localhost:3000';
   private socket;
 
-  constructor() {
+  constructor() {}
+
+  signin() {
     this.socket = io(this.url);
   }
 
+  joinRoom(room) {
+    this.socket.emit('join room', room);
+  }
 
   signout() {
-    this.socket.emit('disconnect');
+    this.socket.disconnect();
   }
 }
