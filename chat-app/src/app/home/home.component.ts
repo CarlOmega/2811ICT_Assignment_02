@@ -33,8 +33,6 @@ export class HomeComponent implements OnInit {
       this.groups = this.user.groups;
       this._socketService.signin();
       if(this.groups.length > 0){
-        console.log("WTF?")
-        console.log(this.groups);
         this.openGroup(this.groups[0].name);
         if(this.groups[0].channels > 0){
           this.channelChangedHandler(this.groups[0].channels[0].name);
@@ -203,8 +201,4 @@ export class HomeComponent implements OnInit {
     return found;
   }
 
-  getChannels(groupName){
-    let channels = [];
-    return channels;
-  }
 }

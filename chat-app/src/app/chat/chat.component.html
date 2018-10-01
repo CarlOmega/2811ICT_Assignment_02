@@ -14,11 +14,11 @@
     <h3 class="card-header">{{channel ? channel.name : Chat}}</h3>
     <div class="card-body" style="height: 500px; overflow-y:scroll">
       <div *ngFor="let message of messages">
-        <div class="card" [ngClass]="{'text-success text-right':message.author == username}" style="width: 100%;">
+        <div class="card"  style="width: 100%;">
           <div *ngIf="message.photo">
-            {{message.photo}}
-            <img class="card-img-top" src="{{message.photo}}" alt="Card image cap">
-          <div class="card-body">
+            <img class="card-img-top" src="messageimages\{{message.photo}}" style="object-fit: contain; height: 200px;" alt="Card image cap" >
+          </div>
+          <div class="card-body" [ngClass]="{'text-success text-right':message.author == username}">
             <h5 class="card-title">{{message.author}}</h5>
             <p class="card-text">{{message.message}}</p>
           </div>

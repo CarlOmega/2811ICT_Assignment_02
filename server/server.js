@@ -34,18 +34,17 @@ app.use(cors(corsOptions));
 // Body-Parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use('/messageimages', express.static(path.join(__dirname, './images/messageimages')));
+//app.user('/messageimages', express.static(path.join(__dirname, './images/messageimages')));
 // Basic Routes
-app.use(express.static(path.join(__dirname, '../chat-app/dist/angular-app')));
+app.use(express.static(path.join(__dirname, '../chat-app/dist/chat-app')));
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+  res.sendFile(path.join(__dirname,'../chat-app/dist/chat-app/index.html'));
 });
 app.get('/home', function(req,res){
-  res.sendFile(path.join(__dirname,'../chat-app/dist/angular-app/index.html'));
+  res.sendFile(path.join(__dirname,'../chat-app/dist/chat-app/index.html'));
 });
-// app.get('*', function(req, res) {
-//   res.sendfile(path.join(__dirname, '../chat-app/dist/angular-app/index.html'));
-// });
+
 
 // mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
 //   if (err) {
@@ -113,17 +112,18 @@ app.post('/api/login', function(req, res){
 });
 
 
-app.post('', function(req,res) {
+app.post('/api/upload', function(req,res) {
   var form = new formidable.IncomingForm();
+
   form.parse(req, function (err, fields, files) {
-    var oldpath = files.filetoupload.path;
-    var newpath = './images/messageimages/' + files.filetoupload.name;
-    fs.rename(oldpath, newpath, function (err) {
+    var oldpath = files.image.path;
+    var newpath = './images/messageimages/' + files.image.name;
+    fs.copyFile(oldpath, newpath, function (err) {
       if (err) throw err;
       //build
-      res.send(path.join(__dirname + newpath));
-      //
-      res.end();
+      console.log("uploaded");
+      console.log(path.join(files.image.name));
+      res.send({url: path.join(files.image.name)});
     });
   });
 });
@@ -260,7 +260,9 @@ app.post('/api/channel/create', function(req, res){
 });
 
 
-
+app.get('*', function(req, res) {
+  res.sendfile(path.join(__dirname, '../chat-app/dist/chat-app/index.html'));
+});
 
 
 // HTTP Listener
