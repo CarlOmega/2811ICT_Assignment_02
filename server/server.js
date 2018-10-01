@@ -254,17 +254,21 @@ app.post('/api/group/create', function(req, res){
             members: [username],
             channels: []
           };
-          if(db.collection("groups").find({name: newGroup.name}).limit(1).count()) {
-            console.log("Group taken");
-            res.send(false);
-          } else {
-            db.collection("groups").insertOne(newGroup, (err, result) => {
-                console.log("Created group");
-                newGroup.role = 1;
-                res.send(newGroup);
-            });
-          }
-          client.close();
+
+          db.collection("groups").findOne({name: newGroup.name}, (err, result) => {
+            if (result) {
+              console.log("Group already made");
+              res.send(false);
+            } else {
+              db.collection("groups").insertOne(newGroup, (err, result) => {
+                  console.log("Created group");
+                  newGroup.role = 1;
+                  res.send(newGroup);
+                  client.close();
+              });
+            }
+          });
+
         });
     }
 });
@@ -289,11 +293,19 @@ app.post('/api/channel/create', function(req, res){
             members: [username],
             history: []
           };
-          db.collection("groups").updateOne({'name': groupName} , {$push: {channels: newChannel}}, (err, result) => {
-              console.log("Created channel");
-              res.send(newChannel);
+          db.collection("groups").findOne({'name': groupName, "channels.name": channelName}, (err, result) => {
+            if (result) {
+              console.log("Channel already made");
+              res.send(false);
+            } else {
+              db.collection("groups").updateOne({'name': groupName} , {$push: {channels: newChannel}}, (err, result) => {
+                  console.log("Created channel");
+                  res.send(newChannel);
+                  client.close();
+              });
+            }
           });
-          client.close();
+
         });
     }
 });
@@ -313,17 +325,23 @@ app.post('/api/user/create', function(req, res){
     }
     // Connected now setup db for query
     const db = client.db(dbName);
-    if(db.collection("users").find({username: newUser.username}).limit(1).count()) {
-      console.log("Username taken");
-      res.send(false);
-    } else {
-      db.collection("users").insertOne(newUser, (err, result) => {
-          console.log("Created new user");
+    db.collection("users").findOne({username: newUser.username}, (err, result) => {
+      if (result) {
+        console.log("User taken");
+        console.log(result);
+        res.send(false);
+      } else {
+        db.collection("users").insertOne(newUser, (err, ress) => {
+          if (err) {
+            console.log(err);
+          }
+          console.log(newUser);
           res.send(newUser);
-      });
-    }
+          client.close();
+        });
+      }
+    });
 
-    client.close();
   });
 });
 
