@@ -114,11 +114,15 @@
               </ul>
               <h6>Promote to {{selectedGroup.name}} admin:</h6>
               <div *ngFor="let member of selectedGroup.members">
-                <button *ngIf="!(selectedGroup.admins.includes(member))" class="btn-success" style="width:100%">{{member}}</button>
+                <button *ngIf="!(selectedGroup.admins.includes(member))" (click)="update('promote', member, selectedGroup.name, null)" class="btn-success" style="width:100%">{{member}}</button>
+              </div>
+              <h6>Promote to {{selectedGroup.name}} admin:</h6>
+              <div *ngFor="let member of selectedGroup.admins">
+                <button *ngIf="member != user.username" (click)="update('demote', member, selectedGroup.name, null)" class="btn-danger" style="width:100%">{{member}}</button>
               </div>
               <h6>Kick from {{selectedGroup.name}}</h6>
               <div *ngFor="let member of selectedGroup.members">
-                <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
+                <button *ngIf="member != user.username" (click)="update('kick', member, selectedGroup.name, null)" class="btn-danger" style="width:100%">{{member}}</button>
               </div>
               <h6>Add user to {{selectedGroup.name}}</h6>
               <div class="input-group mb-3">
@@ -144,7 +148,7 @@
             </ul>
             <h6>Kick from {{selectedChannel.name}}</h6>
             <div *ngFor="let member of selectedChannel.members">
-              <button *ngIf="member != user.username" class="btn-danger" style="width:100%">{{member}}</button>
+              <button *ngIf="member != user.username" (click)="update('kick', memeber, selectedGroup.name, selectedChannel.name)" class="btn-danger" style="width:100%">{{member}}</button>
             </div>
             <h6>Add user to {{selectedChannel.name}}</h6>
             <div class="input-group mb-3">
