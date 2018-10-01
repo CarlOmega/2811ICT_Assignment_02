@@ -29,7 +29,12 @@ export class UserService {
     return this.http.post(this.api + 'user/create', body, httpOptions);
   }
 
+  changeImage(data) {
+    let body = JSON.stringify(data);
+    return this.http.post(this.api + 'user/changeimage', body, httpOptions);
+  }
+
   delete(username){
-    return this.http.delete(this.api + 'user/delete/'+username);
+    return this.http.delete(this.api + 'user/delete/' + username);
   }
 }

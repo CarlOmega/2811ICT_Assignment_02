@@ -128,6 +128,28 @@ app.post('/api/upload', function(req,res) {
   });
 });
 
+app.post('/api/user/changeimage', function(req,res) {
+  let username = req.body.username;
+  let newUrl = req.body.url;
+  mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    }
+    // Connected now setup db for query
+    const db = client.db(dbName);
+    // find user with username x and password y
+    db.collection("users").updateOne({'username': username}, {$set: {profile: newUrl}}, (err, groups) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      console.log(newUrl);
+      res.send({url: newUrl});
+      client.close();
+    });
+  });
+});
 
 // Group APIs
 app.post('/api/groups', function(req,res){

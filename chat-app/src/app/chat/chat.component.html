@@ -19,7 +19,11 @@
             <img class="card-img-top" src="messageimages\{{message.photo}}" style="object-fit: contain; height: 200px;" alt="Card image cap" >
           </div>
           <div class="card-body" [ngClass]="{'text-success text-right':message.author == username}">
-            <h5 class="card-title">{{message.author}}</h5>
+            <div class="card-title">
+              <h5>{{message.author}}</h5>
+              <img *ngIf="!message.profile" src="messageimages\default.jpg" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
+              <img *ngIf="message.profile" src="messageimages\{{message.profile}}" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
+            </div>
             <p class="card-text">{{message.message}}</p>
           </div>
         </div>
@@ -30,7 +34,7 @@
 
   <div class="card-footer text-muted">
     <div class="form-inline">
-      <input type="file" (change)="fileSelected($event)" name="myFile">
+      <input type="file" (change)="fileSelected($event)" name="myFile" accept="image/*">
       <input class="form-control" [(ngModel)]="message" [disabled]="channel == null" style="width:calc(100% - 100px)">
       <button (click)="sendMessage()" class="btn btn-primary" [disabled]="channel == null" style="width:100px">enter</button>
     </div>

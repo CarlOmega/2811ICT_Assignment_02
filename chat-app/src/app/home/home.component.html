@@ -22,13 +22,14 @@
     <ul class="navbar-nav">
       <form>
         <div class="form-group">
-          <label for="exampleFormControlFile1">Example file input</label>
-          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+          <label for="profileimage">Change profile image</label>
+          <input type="file" (change)="imageChanged($event)" class="form-control-file" id="profileimage" accept="image/*">
         </div>
       </form>
       <li class="nav-item">
         Welcome <strong>{{ user.username }}</strong>
-        <img src="messageimages\default.jpg" style="object-fit: contain; height: 200px; width: 200px;" alt="Profile image" >
+        <img *ngIf="!user.profile" src="messageimages\default.jpg" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
+        <img *ngIf="user.profile" src="messageimages\{{user.profile}}" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
       </li>
     </ul>
   </div>

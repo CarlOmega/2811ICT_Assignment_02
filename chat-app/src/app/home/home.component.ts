@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { GroupService } from '../group.service';
 import { SocketService } from '../socket.service';
 import { ImageService } from '../image.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
   public obusers: any = null;
   public users: any;
   public messageImage: any = null;
-  constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService) { }
+  constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService, private _userService: UserService) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user') === null){
@@ -44,6 +45,22 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  imageChanged(event) {
+    const fd = new FormData();
+    fd.append('image',event.target.files[0],event.target.files[0].name);
+    this._imageService.imgupload(fd).subscribe((data: any)=> {
+      console.log(data);
+      let userstuff = {
+        url: data.url,
+        username: this.user.username
+      };
+      this._userService.changeImage(userstuff).subscribe((r: any)=> {
+        console.log(r);
+        this.user.profile = r.url;
+      });
+    });
+  }
+
   fileSelected(event) {
     console.log(event);
     this.messageImage = event.target.files[0];
@@ -57,11 +74,11 @@ export class HomeComponent implements OnInit {
       fd.append('image',this.messageImage,this.messageImage.name);
       this._imageService.imgupload(fd).subscribe((data: any)=> {
         console.log(data);
-        this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, data.url);
+        this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, data.url, this.user.profile);
         this.messageImage = null;
       });
     } else {
-      this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, null);
+      this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, null, this.user.profile);
     }
 
   }
