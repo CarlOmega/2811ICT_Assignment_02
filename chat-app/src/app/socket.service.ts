@@ -15,12 +15,12 @@ export class SocketService {
     this.socket = io(this.url);
   }
 
-  joinRoom(room) {
+  joinRoom(room, username) {
     if (this.currentRoom) {
-      this.socket.emit('leave room', this.currentRoom);
+      this.socket.emit('leave room', {'username': username, 'room': this.currentRoom});
     }
     this.currentRoom = room;
-    this.socket.emit('join room', room);
+    this.socket.emit('join room', {'username': username, 'room': this.currentRoom});
   }
 
   sendMessage(newMessage, username, groupName, url) {
@@ -42,6 +42,16 @@ export class SocketService {
       });
     });
     return obmessages;
+  }
+
+  getUsers() {
+    let obusers = new Observable(observer => {
+      this.socket.removeAllListeners('user');
+      this.socket.on('user', (data) => {
+        observer.next(data);
+      });
+    });
+    return obusers;
   }
 
   signout() {

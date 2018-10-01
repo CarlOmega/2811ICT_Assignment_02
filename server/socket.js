@@ -1,4 +1,5 @@
 module.exports = function(app, io, mongodb) {
+  let rooms = {};
   io.on('connection', (socket) => {
     console.log("User has connected");
 
@@ -7,14 +8,33 @@ module.exports = function(app, io, mongodb) {
       socket.disconnect();
     });
 
-    socket.on('join room', (room) => {
-      console.log("user connected to:", room)
-      socket.join(room);
+    socket.on('join room', (data) => {
+      console.log(data.username, " connected to:", data.room);
+      socket.join(data.room);
+      if (rooms[data.room] == null) {
+        rooms[data.room] = [];
+      }
+      for (var i=0; i < rooms[data.room].length; i++) {
+          if (rooms[data.room][i] === data.username) {
+              rooms[data.room].splice(i, 1);
+          }
+      }
+      rooms[data.room].push(data.username);
+      io.to(data.room).emit('user', rooms[data.room]);
     });
 
-    socket.on('leave room', (room) => {
-      console.log("user left:", room)
-      socket.leave(room);
+    socket.on('leave room', (data) => {
+      console.log(data.username," left:", data.room);
+      socket.leave(data.room);
+      if (rooms[data.room] == null) {
+        rooms[data.room] = [];
+      }
+      for (var i=0; i < rooms[data.room].length; i++) {
+          if (rooms[data.room][i] === data.username) {
+              rooms[data.room].splice(i, 1);
+          }
+      }
+      io.to(data.room).emit('user', rooms[data.room]);
     });
 
     socket.on('message', (message) => {

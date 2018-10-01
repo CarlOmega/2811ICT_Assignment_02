@@ -29,14 +29,22 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     }
-    
+
     this._userService.login(user).subscribe(
-      data => { 
+      (data: any) => {
         console.log(data);
         if(data != false){
-          let temp = JSON.stringify(data);
-          sessionStorage.setItem('user', temp);         
-          this.router.navigate(['/home']); 
+          for (var i = 0; i < data.groups.length; i++) {
+            var temp = [];
+            for (var j = 0; j < data.groups[i].channels.length; j++) {
+              if (data.groups[i].channels[j].members.includes(data.username) || data.groups[i].role > 0) {
+                temp.push(data.groups[i].channels[j]);
+              }
+            }
+            data.groups[i].channels = temp;
+          }
+          sessionStorage.setItem('user', JSON.stringify(data));
+          this.router.navigate(['/home']);
         } else {
           let message = "Your username and password did not match."
           document.getElementById('error').innerHTML = '<div class="alert alert-dismissible alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Oh snap!</strong> '+ message +'</div>';

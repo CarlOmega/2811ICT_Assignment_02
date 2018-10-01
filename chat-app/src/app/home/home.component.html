@@ -20,8 +20,15 @@
 
     <!-- Welcome note on right side -->
     <ul class="navbar-nav">
+      <form>
+        <div class="form-group">
+          <label for="exampleFormControlFile1">Example file input</label>
+          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+      </form>
       <li class="nav-item">
         Welcome <strong>{{ user.username }}</strong>
+        <img src="messageimages\default.jpg" style="object-fit: contain; height: 200px; width: 200px;" alt="Profile image" >
       </li>
     </ul>
   </div>
@@ -39,7 +46,7 @@
           <div class="card-body" style="height: 500px; overflow-y:scroll">
 
             <!-- New Group Form -->
-            <div class="form-inline" >
+            <div class="form-inline" *ngIf="user.permissions > 1">
               <form (submit)="createGroup($event)">
                 <input class="form-control" name="newGroupName" style="width:calc(100% - 100px)" placeholder="New Group" type="text" [(ngModel)]="newGroupName">
                 <button class="btn btn-primary" style="width:100px">Create</button>
@@ -61,7 +68,7 @@
           <div class="card-body" style="height: 500px; overflow-y:scroll">
 
             <!-- New Channel Form -->
-            <div class="form-inline" >
+            <div class="form-inline" *ngIf="selectedGroup.role > 0">
               <form (submit)="createChannel($event)">
               <input class="form-control" name="newChannelName" style="width:calc(100% - 100px)" placeholder="New Channel" type="text" [(ngModel)]="newChannelName">
               <button class="btn btn-primary" style="width:100px">Create</button>
@@ -82,9 +89,9 @@
 
       <!-- Members Column -->
       <div class="col-lg-2" style="padding:0px">
-        <h3 style="text-align:center; width:100%">Users</h3>
+        <h3 style="text-align:center; width:100%">Users Online</h3>
         <ng-container *ngIf="selectedChannel != null" >
-            <p *ngFor="let member of selectedChannel.members">
+            <p *ngFor="let member of users">
               {{ member }}
             </p>
         </ng-container>
@@ -126,7 +133,7 @@
       </div>
       <!-- Channels Column -->
       <div class="col-lg-2" style="padding:0px">
-        <div class="card mb-4" style="padding:10px" *ngIf="selectedChannel">
+        <div class="card mb-4" style="padding:10px" *ngIf="selectedChannel && selectedGroup.role > 0">
           <h3 class="card-header">Channel Settings</h3>
           <div class="card-body" style="height: 500px; overflow-y:scroll">
             <h4>{{selectedChannel.name}}</h4>
@@ -151,7 +158,7 @@
       </div>
 
       <div class="col-lg-8" style="padding:0px">
-        <div class="card mb-4" style="padding:10px">
+        <div class="card mb-4" style="padding:10px" *ngIf="user.permissions > 1">
           <h3 class="card-header">User Settings</h3>
         </div>
       </div>

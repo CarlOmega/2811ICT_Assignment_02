@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   public newChannelName: String;
   public obmessages: any = null;
   public messages: any;
+  public obusers: any = null;
+  public users: any;
   public messageImage: any = null;
   constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService) { }
 
@@ -32,9 +34,10 @@ export class HomeComponent implements OnInit {
       console.log(this.user);
       this.groups = this.user.groups;
       this._socketService.signin();
+
       if(this.groups.length > 0){
         this.openGroup(this.groups[0].name);
-        if(this.groups[0].channels > 0){
+        if(this.groups[0].channels.length > 0){
           this.channelChangedHandler(this.groups[0].channels[0].name);
         }
       }
@@ -55,6 +58,7 @@ export class HomeComponent implements OnInit {
       this._imageService.imgupload(fd).subscribe((data: any)=> {
         console.log(data);
         this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, data.url);
+        this.messageImage = null;
       });
     } else {
       this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, null);
@@ -185,7 +189,7 @@ export class HomeComponent implements OnInit {
     for(let i = 0; i < this.channels.length; i++){
       if(this.channels[i].name == name){
         this.selectedChannel = this.channels[i];
-        this._socketService.joinRoom(this.selectedChannel.name);
+        this._socketService.joinRoom(this.selectedChannel.name, this.user.username);
         this.messages = this.selectedChannel.history;
         if (this.obmessages != null) {
           this.obmessages.unsubscribe();
@@ -194,6 +198,13 @@ export class HomeComponent implements OnInit {
           console.log(data);
           this.messages.push(data);
           sessionStorage.setItem('user', JSON.stringify(this.user));
+        });
+        if (this.obusers != null) {
+          this.obusers.unsubscribe();
+        }
+        this.obusers = this._socketService.getUsers().subscribe((data)=> {
+          console.log(data);
+          this.users = data;
         });
         found = true;
       }
