@@ -348,7 +348,7 @@ app.post('/api/user/change', function(req, res){
             res.send(true);
         });
       } else {
-        db.collection("groups").updateOne({'name': groupName} , {$push: {admins: username}}, (err, result) => {
+        db.collection("groups").updateOne({'name': groupName} , {$push: {members: username}}, (err, result) => {
             console.log("Added user");
             res.send(true);
         });

@@ -122,9 +122,9 @@
               </div>
               <h6>Add user to {{selectedGroup.name}}</h6>
               <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Username">
+                <input type="text" class="form-control" #groupuser placeholder="Username">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-success" type="button">Add</button>
+                  <button class="btn btn-outline-success" (click)="update('add', groupuser.value, selectedGroup.name, null)" type="button">Add</button>
                 </div>
               </div>
             </div>
@@ -148,9 +148,9 @@
             </div>
             <h6>Add user to {{selectedChannel.name}}</h6>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Username">
+              <input type="text" class="form-control" #channeluser placeholder="Username">
               <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button">Add</button>
+                <button class="btn btn-outline-success" (click)="update('add', channeluser.value, selectedGroup.name, selectedChannel.name)" type="button">Add</button>
               </div>
             </div>
           </div>

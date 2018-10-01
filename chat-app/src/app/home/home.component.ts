@@ -155,8 +155,9 @@ export class HomeComponent implements OnInit {
       'groupName': groupName,
       'channelName': channelName
     };
+    console.log(dataToSend);
     this._groupService.update(dataToSend).subscribe((res) => {
-      this._groupService.getGroups(dataToSend).subscribe((data: any) => {
+      this._groupService.getGroups({'username': this.user.username}).subscribe((data: any) => {
         if(data != false){
           for (var i = 0; i < data.groups.length; i++) {
             var temp = [];

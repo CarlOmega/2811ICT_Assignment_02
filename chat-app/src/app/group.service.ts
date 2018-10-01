@@ -21,9 +21,9 @@ export class GroupService {
 
   update(data) {
     let body = JSON.stringify(data);
-    return this.http.post(this.api + 'group/create', body, httpOptions);
+    return this.http.post(this.api + 'user/change', body, httpOptions);
   }
-  
+
   createGroup(data){
     let body = JSON.stringify(data);
     return this.http.post(this.api + 'group/create', body, httpOptions);
