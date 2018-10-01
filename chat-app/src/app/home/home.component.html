@@ -148,7 +148,7 @@
             </ul>
             <h6>Kick from {{selectedChannel.name}}</h6>
             <div *ngFor="let member of selectedChannel.members">
-              <button *ngIf="member != user.username" (click)="update('kick', memeber, selectedGroup.name, selectedChannel.name)" class="btn-danger" style="width:100%">{{member}}</button>
+              <button *ngIf="member != user.username" (click)="update('kick', member, selectedGroup.name, selectedChannel.name)" class="btn-danger" style="width:100%">{{member}}</button>
             </div>
             <h6>Add user to {{selectedChannel.name}}</h6>
             <div class="input-group mb-3">

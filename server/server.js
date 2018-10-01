@@ -375,7 +375,7 @@ app.post('/api/user/change', function(req, res){
     if (type == "kick") {
       if (channelName) {
         db.collection("groups").updateOne({'name': groupName, "channels.name": channelName} , {$pull: {"channels.$.members": username}}, (err, result) => {
-            console.log("Added user to channel");
+            console.log("Kicked user from channel");
             res.send(true);
         });
       } else {

@@ -99,6 +99,9 @@ export class HomeComponent implements OnInit {
         if (newGroup){
           this.groups.push(newGroup);
           sessionStorage.setItem('user', JSON.stringify(this.user));
+        } else {
+          alert("Cannot create that group.");
+          console.log("Cannot create that group.");
         }
       },
       error => {
@@ -119,6 +122,9 @@ export class HomeComponent implements OnInit {
           if (newChannel) {
             this.selectedGroup.channels.push(newChannel);
             sessionStorage.setItem('user', JSON.stringify(this.user));
+          } else {
+            alert("Cannot create that channel.");
+            console.log("Cannot create that channel.");
           }
         },
         error => {
@@ -168,6 +174,7 @@ export class HomeComponent implements OnInit {
           }
           this.groups = data.groups;
           if (channelName) {
+            console.log(channelName);
             this.openGroup(groupName);
             this.channelChangedHandler(channelName);
           } else {
@@ -192,6 +199,7 @@ export class HomeComponent implements OnInit {
           this.allusers = data;
         });
       } else {
+        alert("Cannot create that user.");
         console.log("Cannot create that user.");
       }
 
@@ -262,6 +270,7 @@ export class HomeComponent implements OnInit {
       }
     }
     this.channels = this.selectedGroup.channels;
+    this.selectedChannel = null;
   }
 
   // Responsible for handling the event call by the child component
