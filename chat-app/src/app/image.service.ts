@@ -13,7 +13,7 @@ export class ImageService {
 
   constructor(private http: HttpClient) { }
 
-  imgupload(fd) {
-    return this.http.post('/api/upload', fd);
+  imgupload(formData) {
+    return this.http.post('/api/upload', formData);
   }
 }
