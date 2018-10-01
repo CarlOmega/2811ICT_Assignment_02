@@ -95,8 +95,7 @@ export class HomeComponent implements OnInit {
       'newGroupName': this.newGroupName,
       'username': this.user.username
     };
-    this._groupService.createGroup(data).subscribe(
-      newGroup => {
+    this._groupService.createGroup(data).subscribe(newGroup => {
         if (newGroup){
           this.groups.push(newGroup);
           sessionStorage.setItem('user', JSON.stringify(this.user));
@@ -116,8 +115,7 @@ export class HomeComponent implements OnInit {
         'newChannelName': this.newChannelName,
         'username': this.user.username
       };
-      this._groupService.createChannel(data).subscribe(
-        newChannel => {
+      this._groupService.createChannel(data).subscribe(newChannel => {
           if (newChannel) {
             this.selectedGroup.channels.push(newChannel);
             sessionStorage.setItem('user', JSON.stringify(this.user));
