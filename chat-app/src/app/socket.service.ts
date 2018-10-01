@@ -23,12 +23,13 @@ export class SocketService {
     this.socket.emit('join room', room);
   }
 
-  sendMessage(newMessage, username, groupName) {
+  sendMessage(newMessage, username, groupName, url) {
     let data = {
       room: this.currentRoom,
       message: newMessage,
       author: username,
-      group: groupName
+      group: groupName,
+      photo: url
     };
     this.socket.emit('message', data);
   }

@@ -16,7 +16,8 @@
       <div *ngFor="let message of messages">
         <div class="card" [ngClass]="{'text-success text-right':message.author == username}" style="width: 100%;">
           <div *ngIf="message.photo">
-          <img class="card-img-top" src="" alt="Card image cap">
+            {{message.photo}}
+            <img class="card-img-top" src="{{message.photo}}" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">{{message.author}}</h5>
             <p class="card-text">{{message.message}}</p>
@@ -29,7 +30,7 @@
 
   <div class="card-footer text-muted">
     <div class="form-inline">
-      <input type="file" name="myFile">
+      <input type="file" (change)="fileSelected($event)" name="myFile">
       <input class="form-control" [(ngModel)]="message" [disabled]="channel == null" style="width:calc(100% - 100px)">
       <button (click)="sendMessage()" class="btn btn-primary" [disabled]="channel == null" style="width:100px">enter</button>
     </div>

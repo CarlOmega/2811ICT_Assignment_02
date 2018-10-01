@@ -77,7 +77,7 @@
 
       <!-- Chat Column -->
       <div class="col-lg-6" style="padding:0px">
-        <app-chat [channel]=selectedChannel [messages]=messages [username]=user.username (messageSend)="sendMessage($event)"></app-chat>
+        <app-chat [channel]=selectedChannel [messages]=messages [username]=user.username (fileChanged)="fileSelected($event)" (messageSend)="sendMessage($event)"></app-chat>
       </div>
 
       <!-- Members Column -->

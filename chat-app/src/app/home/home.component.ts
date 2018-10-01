@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { GroupService } from '../group.service';
 import { SocketService } from '../socket.service';
+import { ImageService } from '../image.service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ export class HomeComponent implements OnInit {
   public newChannelName: String;
   public obmessages: any = null;
   public messages: any;
-  constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService) { }
+  public messageImage: any = null;
+  constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user') === null){
@@ -41,9 +43,25 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  fileSelected(event) {
+    console.log(event);
+    this.messageImage = event.target.files[0];
+  }
+
   sendMessage(message) {
     console.log(message);
-    this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name);
+    if (this.messageImage) {
+      const fd = new FormData();
+      console.log(this.messageImage);
+      fd.append('image',this.messageImage,this.messageImage.name);
+      this._imageService.imgupload(fd).subscribe((data: any)=> {
+        console.log(data);
+        this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, data.url);
+      });
+    } else {
+      this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, null);
+    }
+
   }
 
   createGroup(event){

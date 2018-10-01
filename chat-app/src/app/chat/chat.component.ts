@@ -10,10 +10,15 @@ export class ChatComponent implements OnInit {
   @Input() username;
   @Input() messages: any;
   @Output() messageSend: EventEmitter<string> = new EventEmitter();
+  @Output() fileChanged: EventEmitter<string> = new EventEmitter();
   message: any;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  fileSelected(event) {
+    this.fileChanged.emit(event);
   }
 
   sendMessage(){
