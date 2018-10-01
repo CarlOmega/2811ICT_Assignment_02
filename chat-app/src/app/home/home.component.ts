@@ -148,6 +148,19 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  update(type, username, groupName, channelName) {
+    let data = {
+      'type': type,
+      'username': username,
+      'groupName': groupName,
+      'channelName': channelName
+    };
+    this._groupService.update(data).subscribe((res) => {
+      
+    })
+
+  }
+
   createUser(username, email, password) {
     let data = {
       'username': username,

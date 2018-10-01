@@ -19,6 +19,11 @@ export class GroupService {
 
   constructor(private http:HttpClient) {}
 
+  update(data) {
+    let body = JSON.stringify(data);
+    return this.http.post(this.api + 'group/create', body, httpOptions);
+  }
+  
   createGroup(data){
     let body = JSON.stringify(data);
     return this.http.post(this.api + 'group/create', body, httpOptions);
