@@ -148,6 +148,21 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  createUser(username, email, password) {
+    let data = {
+      'username': username,
+      'email': email,
+      'password': password
+    }
+    this._userService.create(data).subscribe((user) => {
+      this._userService.getUsers().subscribe((data: any) => {
+        this.allusers = data;
+      });
+    });
+  }
+
+
+
   deleteGroup(groupName){
     this._groupService.deleteGroup(groupName, this.user.username).subscribe(
       data=>{

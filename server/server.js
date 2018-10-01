@@ -16,8 +16,6 @@ const socketIO = require('socket.io');
 const io = socketIO(server);
 require('./socket.js')(app, io, mongodb);
 
-
-
 // CORS
 // We are enabling CORS so that our 'ng serve' Angular server can still access
 // our Node server.
@@ -28,7 +26,6 @@ var corsOptions = {
   credentials: true
 }
 app.use(cors(corsOptions));
-
 
 
 // Body-Parser
@@ -44,26 +41,6 @@ app.get('/', function (req, res) {
 app.get('/home', function(req,res){
   res.sendFile(path.join(__dirname,'../chat-app/dist/chat-app/index.html'));
 });
-
-
-// mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
-//   if (err) {
-//     console.log(err);
-//     res.status(500).end();
-//   }
-//   // Connected now setup db for query
-//   const db = client.db(dbName);
-//   let user = {
-//     username: 'carl',
-//     password: '12345',
-//     email: 'carl@carl.com',
-//     permissions: 0
-//   };
-//   db.collection("users").insertOne(user, (err, result) => {
-//       console.log("Created user");
-//   });
-//   client.close();
-// });
 
 // Login Module
 const login = require('./login.js')();
@@ -185,7 +162,6 @@ app.post('/api/groups', function(req,res){
       }
       // Connected now setup db for query
     	const db = client.db(dbName);
-      // find user with username x and password y
       db.collection("groups").find({'members': username}).toArray((err, groups) => {
         if (err) {
           console.log(err);
@@ -302,6 +278,30 @@ app.post('/api/channel/create', function(req, res){
           client.close();
         });
     }
+});
+
+
+app.post('/api/user/create', function(req, res){
+  let newUser = {
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    permissions: 0
+  }
+  mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    }
+    // Connected now setup db for query
+    const db = client.db(dbName);
+
+    db.collection("users").insertOne(newUser, (err, result) => {
+        console.log("Created new user");
+        res.send(newUser);
+    });
+    client.close();
+  });
 });
 
 
