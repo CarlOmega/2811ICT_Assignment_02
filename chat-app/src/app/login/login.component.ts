@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
       password: this.password
     }
 
-    this._userService.login(user).subscribe(
-      (data: any) => {
+    this._userService.login(user).subscribe((data: any) => {
         console.log(data);
         if(data != false){
           for (var i = 0; i < data.groups.length; i++) {

@@ -162,13 +162,28 @@ app.post('/api/groups', function(req,res){
       }
       // Connected now setup db for query
     	const db = client.db(dbName);
-      db.collection("groups").find({'members': username}).toArray((err, groups) => {
-        if (err) {
-          console.log(err);
-          res.status(500).end();
+
+      db.collection("users").findOne({'username': username}, (err, result) => {
+        var query = {'members': username};
+        if (result.permissions == 2) {
+          query = {};
         }
-        res.send(groups);
-        client.close();
+        db.collection("groups").find(query).toArray((err, groups) => {
+          if (err) {
+            console.log(err);
+            res.status(500).end();
+          }
+          result.groups = groups;
+          for (var i = 0; i < groups.length; i++) {
+            if (groups[i].admins.includes(result.username) || result.permissions == 2) {
+              groups[i].role = 1;
+            } else {
+              groups[i].role = 0;
+            }
+          }
+          res.send(result);
+          client.close();
+        });
       });
     });
 });

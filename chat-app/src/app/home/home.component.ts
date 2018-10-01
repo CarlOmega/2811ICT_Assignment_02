@@ -149,15 +149,29 @@ export class HomeComponent implements OnInit {
   }
 
   update(type, username, groupName, channelName) {
-    let data = {
+    let dataToSend = {
       'type': type,
       'username': username,
       'groupName': groupName,
       'channelName': channelName
     };
-    this._groupService.update(data).subscribe((res) => {
-      
-    })
+    this._groupService.update(dataToSend).subscribe((res) => {
+      this._groupService.getGroups(dataToSend).subscribe((data: any) => {
+        if(data != false){
+          for (var i = 0; i < data.groups.length; i++) {
+            var temp = [];
+            for (var j = 0; j < data.groups[i].channels.length; j++) {
+              if (data.groups[i].channels[j].members.includes(data.username) || data.groups[i].role > 0) {
+                temp.push(data.groups[i].channels[j]);
+              }
+            }
+            data.groups[i].channels = temp;
+          }
+          this.user = data;
+          sessionStorage.setItem('user', JSON.stringify(data));
+        }
+      });
+    });
 
   }
 
