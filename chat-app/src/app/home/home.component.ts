@@ -168,7 +168,9 @@ export class HomeComponent implements OnInit {
             }
             data.groups[i].channels = temp;
           }
-          this.user = data;
+          this.groups = data.groups;
+          this.selectedGroup = null;
+          this.selectedChannel = null;
           sessionStorage.setItem('user', JSON.stringify(data));
         }
       });

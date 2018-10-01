@@ -116,7 +116,7 @@
               <div *ngFor="let member of selectedGroup.members">
                 <button *ngIf="!(selectedGroup.admins.includes(member))" (click)="update('promote', member, selectedGroup.name, null)" class="btn-success" style="width:100%">{{member}}</button>
               </div>
-              <h6>Promote to {{selectedGroup.name}} admin:</h6>
+              <h6>Demote to {{selectedGroup.name}} admin:</h6>
               <div *ngFor="let member of selectedGroup.admins">
                 <button *ngIf="member != user.username" (click)="update('demote', member, selectedGroup.name, null)" class="btn-danger" style="width:100%">{{member}}</button>
               </div>
