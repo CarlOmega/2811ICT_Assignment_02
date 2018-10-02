@@ -97,11 +97,12 @@ export class HomeComponent implements OnInit {
   // create a new group
   createGroup(event){
     event.preventDefault();
-    let data = {
-      'newGroupName': this.newGroupName,
-      'username': this.user.username
-    };
-    this._groupService.createGroup(data).subscribe(newGroup => {
+    if (this.newGroupName) {
+      let data = {
+        'newGroupName': this.newGroupName,
+        'username': this.user.username
+      };
+      this._groupService.createGroup(data).subscribe(newGroup => {
         if (newGroup){
           this.groups.push(newGroup);
           sessionStorage.setItem('user', JSON.stringify(this.user));
@@ -109,16 +110,15 @@ export class HomeComponent implements OnInit {
           alert("Cannot create that group.");
           console.log("Cannot create that group.");
         }
-      },
-      error => {
+      }, error => {
         console.error(error);
-      }
-    )
+      });
+    }
   }
   //create a new channel
   createChannel(event){
     event.preventDefault();
-    if (this.selectedGroup) {
+    if (this.selectedGroup && this.newChannelName) {
       let data = {
         'groupName': this.selectedGroup.name,
         'newChannelName': this.newChannelName,
@@ -194,22 +194,24 @@ export class HomeComponent implements OnInit {
   }
   //create a new user
   createUser(username, email, password) {
-    let data = {
-      'username': username,
-      'email': email,
-      'password': password
-    }
-    this._userService.create(data).subscribe((user) => {
-      if (user != false) {
-        this._userService.getUsers().subscribe((data: any) => {
-          this.allusers = data;
-        });
-      } else {
-        alert("Cannot create that user.");
-        console.log("Cannot create that user.");
+    if (username !== '' && email !== '' && password !== '') {
+      let data = {
+        'username': username,
+        'email': email,
+        'password': password
       }
+      this._userService.create(data).subscribe((user) => {
+        if (user != false) {
+          this._userService.getUsers().subscribe((data: any) => {
+            this.allusers = data;
+          });
+        } else {
+          alert("Cannot create that user.");
+          console.log("Cannot create that user.");
+        }
 
-    });
+      });
+    }
   }
   //delete a user
   deleteUser(id) {

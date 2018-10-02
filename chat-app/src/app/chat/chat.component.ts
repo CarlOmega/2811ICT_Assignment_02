@@ -38,9 +38,12 @@ export class ChatComponent implements OnInit {
   }
   //notfiy parent that user wants to send message
   sendMessage(){
-    console.log("messageSend("+this.message+")");
-    this.messageSend.emit(this.message);
-    this.scrollToBottom();
+    if (this.message) {
+      console.log("messageSend("+this.message+")");
+      this.messageSend.emit(this.message);
+      this.scrollToBottom();
+    }
+    this.message = '';
   }
 
 }
