@@ -28,10 +28,10 @@ export class ChatComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-        try {
-            this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-        } catch(err) { }
-    }
+      try {
+          this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+      } catch(err) { }
+  }
 
   sendMessage(){
     console.log("messageSend("+this.message+")");

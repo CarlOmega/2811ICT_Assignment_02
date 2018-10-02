@@ -14,7 +14,7 @@
     <h3 class="card-header">{{channel ? channel.name : Chat}}</h3>
     <div class="card-body" style="height: 400px; overflow-y:scroll" #chat id="chat">
       <div *ngFor="let message of messages">
-        <div class="card"  style="width: 100%;">
+        <div class="card" style="width: 100%;">
           <div *ngIf="message.photo">
             <img class="card-img-top" src="messageimages\{{message.photo}}" style="object-fit: contain; height: 200px;" alt="Card image cap" >
           </div>
@@ -24,7 +24,7 @@
               <img *ngIf="!message.profile" src="messageimages\default.jpg" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
               <img *ngIf="message.profile" src="messageimages\{{message.profile}}" style="object-fit: contain; height: 50px; width: 50px; border-radius: 50%" alt="Profile image" >
             </div>
-            <p class="card-text text-primary">{{message.message}}</p>
+            <p class="card-text text-grey">{{message.message}}</p>
           </div>
         </div>
       </div>
