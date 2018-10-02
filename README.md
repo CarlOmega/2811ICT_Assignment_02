@@ -17,7 +17,7 @@ The git layout was simple and just used two folders:
   * server : to store the server and all assests for the node.js file
     * test : contains mocha tests for node.js
     * images : stores the images uploaded to the server
-  * chat* app : the folder to store the angular project
+  * chat-app : the folder to store the angular project
 
 ## Data Structures
 The database consists of two collections:
@@ -40,6 +40,10 @@ The database consists of two collections:
         * profile : profile of author
 
 ## REST API
-
+Routes: all under api/
+* login:
+ * describtion:
+ * parameters:
+ * returns:
 
 ## Angular Architecture
