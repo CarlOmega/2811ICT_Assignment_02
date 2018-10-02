@@ -1,5 +1,5 @@
 # Summary
-This is a solution for Assignment 1 in 2811ICT *  Web Programming.
+2811ICT Assignment 02 Carl Humphries s5084150 
 
 
 # Installation
@@ -7,7 +7,10 @@ This is a solution for Assignment 1 in 2811ICT *  Web Programming.
 Change directory to **server** and run **npm install**. Run server by running **node server.js** and the Node server will start listening on port 3000. Node server is set up to accept CORS from **localhost:4200**.
 
 # Installation
-Change directory to **chat* app** an run **npm install**. You can run the Angular server by **ng serve**. As CORS is set up on the Node server, this will still allow you send data between the Angular chat app and the node server. **ng build** will create the distributable, compiled version of the Angular app. The Node server will already be preconfigured to run **dist/index.html**.
+Change directory to **chat-app** an run **npm install**. You can run the Angular server by **ng serve**. As CORS is set up on the Node server, this will still allow you send data between the Angular chat app and the node server. **ng build** will create the distributable, compiled version of the Angular app. The Node server will already be preconfigured to run **dist/index.html**.
+
+# Test
+To run tests navigate to **server** and run **npm test**. this will perform test to test the database queries. Most of the API are tested by testing the function inside the API and validating if the database was updated as indended. A test database was used so it doesn't mess with the live server.
 
 # Documentation
 ## Git Layout
