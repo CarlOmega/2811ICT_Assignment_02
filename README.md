@@ -42,68 +42,68 @@ The database consists of two collections:
 ## REST API
 Routes: all under api/
 * POST login:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: This API route is to test if a user can log in. it also returns the groups for the user.
+    * parameters: username, password
+    * returns: groups that user is in else false if failed
 
 * POST upload:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: using formitable allows uploading images to the server
+    * parameters: formitiable form with image
+    * returns: url of where the image is stored
     
 * POST user/changeimage:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: updates the databse to store the url of the profile image
+    * parameters: username, url
+    * returns: url
 
 * GET getusers:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: gets the info of all the users for super admins
+    * parameters: null
+    * returns: all the users inside of the user collection
     
 * GET groups:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: gets all the groups on the server under a username
+    * parameters: username
+    * returns: groups that the user is in
 
 * DELETE group/delete:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: deletes a group from the collection
+    * parameters: groupName
+    * returns: true if success false otherwise
 
 * DELETE channel/delete:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: deletes a channel from inside the given group
+    * parameters: groupName, channelName
+    * returns: true if success false otherwise
 
 * POST group/create:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: creates a new group in the groups collection and adds user to it
+    * parameters: newGroupName, username
+    * returns: the new group created else false if group exsists
   
 * POST channel/create:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: creates a new channel inside the given group and adds the creator to it
+    * parameters: groupName, username, newChannelName
+    * returns: the created channel else false if channel exsists
 
 * POST user/create:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: creates a new user with normal permissions
+    * parameters: username, email, password
+    * returns: the new user created else false if user is taken
 
 * POST user/change:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: updates what group or channel the user is in or their admin status
+    * parameters: type (type of action), username, groupName, channelName
+    * returns: true is succes else false
 
 * POST user/promote:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: updates a user to be super admin or normal user 
+    * parameters: id, type (0 for normal 2 for super)
+    * returns: true if success else false 
 
 * DELETE user/delete:
-    * describtion:
-    * parameters:
-    * returns:
+    * describtion: deletes a user from the collection users
+    * parameters: id
+    * returns: true if success else false
 
 ## Angular Architecture
