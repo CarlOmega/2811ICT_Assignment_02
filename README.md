@@ -1,5 +1,5 @@
 # Summary
-2811ICT Assignment 02 Carl Humphries s5084150 
+2811ICT Assignment 02 Carl Humphries s5084150
 
 
 # Installation
@@ -53,7 +53,7 @@ Routes: all under api/
     * describtion: using formitable allows uploading images to the server
     * parameters: formitiable form with image
     * returns: url of where the image is stored
-    
+
 * POST user/changeimage:
     * describtion: updates the databse to store the url of the profile image
     * parameters: username, url
@@ -63,7 +63,7 @@ Routes: all under api/
     * describtion: gets the info of all the users for super admins
     * parameters: null
     * returns: all the users inside of the user collection
-    
+
 * GET groups:
     * describtion: gets all the groups on the server under a username
     * parameters: username
@@ -83,7 +83,7 @@ Routes: all under api/
     * describtion: creates a new group in the groups collection and adds user to it
     * parameters: newGroupName, username
     * returns: the new group created else false if group exsists
-  
+
 * POST channel/create:
     * describtion: creates a new channel inside the given group and adds the creator to it
     * parameters: groupName, username, newChannelName
@@ -100,9 +100,9 @@ Routes: all under api/
     * returns: true is succes else false
 
 * POST user/promote:
-    * describtion: updates a user to be super admin or normal user 
+    * describtion: updates a user to be super admin or normal user
     * parameters: id, type (0 for normal 2 for super)
-    * returns: true if success else false 
+    * returns: true if success else false
 
 * DELETE user/delete:
     * describtion: deletes a user from the collection users
@@ -115,6 +115,7 @@ I used the provided angular project from Ryoma as a starting point which had hom
     * group: this service allows the angular project to make api requests to perform CRUD actions on the databse. This service mainly deals with the groups collection.
     * user: this service allows the angular project to make connection to the REST api to perform CRUB actions on the user collection. these include loggin in and updating users.
     * socket: this service allows the angular project to use sockets to communicate realtime messages to the server and other clients. this deals with joining rooms and sending messages.
+    * image: this service allows the uploading of images using formidable.
 * Components:
     * login: this component acts as a whole page to provide a login point to the user.
     * home: this component is the app itself (I went for a single page design kinda like discord). This component implements other components to render the channels and chat messages.

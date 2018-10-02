@@ -7,6 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./channels.component.css']
 })
 export class ChannelsComponent implements OnInit {
+  /*
+  this component allows dynamic loading of the channels and enables 
+  linking functions to when the user clicks a channel.
+  */
   @Input() channels;
   @Input() group;
   @Input() user;
@@ -16,7 +20,7 @@ export class ChannelsComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  //notfiy parent that user has changed channel
   changeChannel(name){
     // console.log("changeChannel("+name+")");
     this.channelChanged.emit(name);

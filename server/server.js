@@ -42,6 +42,7 @@ app.get('/home', function(req,res){
   res.sendFile(path.join(__dirname,'../chat-app/dist/chat-app/index.html'));
 });
 
+// This API route is to test if a user can log in. it also returns the groups for the user.
 app.post('/api/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
@@ -84,7 +85,7 @@ app.post('/api/login', function(req, res){
   });
 });
 
-
+// using formitable allows uploading images to the server
 app.post('/api/upload', function(req,res) {
   var form = new formidable.IncomingForm();
 
@@ -101,6 +102,7 @@ app.post('/api/upload', function(req,res) {
   });
 });
 
+// updates the databse to store the url of the profile image
 app.post('/api/user/changeimage', function(req,res) {
   let username = req.body.username;
   let newUrl = req.body.url;
@@ -124,6 +126,7 @@ app.post('/api/user/changeimage', function(req,res) {
   });
 });
 
+// gets the info of all the users for super admins
 app.get('/api/getusers', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
@@ -147,7 +150,7 @@ app.get('/api/getusers', function(req, res){
   });
 });
 
-// Group APIs
+// gets all the groups on the server under a username
 app.post('/api/groups', function(req,res){
     // We want to authenticate again -- usually you'd use a token
     let username = req.body.username;
@@ -184,6 +187,7 @@ app.post('/api/groups', function(req,res){
     });
 });
 
+// deletes a group from the collection
 app.delete('/api/group/delete/:groupname', function(req, res){
     let groupName = req.params.groupname;
     mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
@@ -206,6 +210,7 @@ app.delete('/api/group/delete/:groupname', function(req, res){
     });
 });
 
+// deletes a channel from inside the given group
 app.delete('/api/channel/delete/', function(req, res){
     let channelName = req.query.channelName;
     let groupName = req.query.groupName;
@@ -230,6 +235,7 @@ app.delete('/api/channel/delete/', function(req, res){
     });
 });
 
+// creates a new group in the groups collection and adds user to it
 app.post('/api/group/create', function(req, res){
     let groupName = req.body.newGroupName;
     let username = req.body.username;
@@ -269,6 +275,7 @@ app.post('/api/group/create', function(req, res){
     }
 });
 
+// creates a new channel inside the given group and adds the creator to it
 app.post('/api/channel/create', function(req, res){
     let groupName = req.body.groupName;
     let username = req.body.username;
@@ -306,7 +313,7 @@ app.post('/api/channel/create', function(req, res){
     }
 });
 
-
+// creates a new user with normal permissions
 app.post('/api/user/create', function(req, res){
   let newUser = {
     username: req.body.username,
@@ -341,6 +348,7 @@ app.post('/api/user/create', function(req, res){
   });
 });
 
+// updates what group or channel the user is in or their admin status
 app.post('/api/user/change', function(req, res){
   let type = req.body.type;
   let username = req.body.username;
@@ -397,6 +405,7 @@ app.post('/api/user/change', function(req, res){
   });
 });
 
+// updates a user to be super admin or normal user
 app.post('/api/user/promote', function(req, res){
     let id = req.body.id;
     let type = req.body.type;
@@ -419,7 +428,7 @@ app.post('/api/user/promote', function(req, res){
     });
 });
 
-
+// deletes a user from the collection users
 app.delete('/api/user/delete/:id', function(req, res){
     let id = req.params.id;
     mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {

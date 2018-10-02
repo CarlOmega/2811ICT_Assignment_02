@@ -10,18 +10,21 @@ import { $ } from 'protractor';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  /*
+  this component acts as a whole page to provide a login point to the user.
+  */
   public username:string;
   private password:string;
 
   constructor(private router:Router, private form:FormsModule, private _userService:UserService) {
   }
-
+  //checks if user is logged in
   ngOnInit() {
     if(sessionStorage.getItem('user') !== null){
       this.router.navigate(['/home']);
     }
   }
-
+  //function to login user and get server groups state
   loginUser(event){
     event.preventDefault();
     console.log(this.username);

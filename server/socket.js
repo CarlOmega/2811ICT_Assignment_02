@@ -1,13 +1,14 @@
 module.exports = function(app, io, mongodb) {
   let rooms = {};
+  //user connected to socket
   io.on('connection', (socket) => {
     console.log("User has connected");
-
+    //user disconnected
     socket.on('disconnect', () => {
       console.log('User has disconnected');
       socket.disconnect();
     });
-
+    //user joined new room
     socket.on('join room', (data) => {
       console.log(data.username, " connected to:", data.room);
       socket.join(data.room);
@@ -22,7 +23,7 @@ module.exports = function(app, io, mongodb) {
       rooms[data.room].push(data.username);
       io.to(data.room).emit('user', rooms[data.room]);
     });
-
+    //user left room
     socket.on('leave room', (data) => {
       console.log(data.username," left:", data.room);
       socket.leave(data.room);
@@ -36,7 +37,7 @@ module.exports = function(app, io, mongodb) {
       }
       io.to(data.room).emit('user', rooms[data.room]);
     });
-
+    //user sent message
     socket.on('message', (message) => {
       console.log("Got message");
       console.log(message);

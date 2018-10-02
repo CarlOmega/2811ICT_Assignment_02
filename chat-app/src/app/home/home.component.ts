@@ -11,6 +11,11 @@ import { UserService } from '../user.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  /*
+  this component is the app itself (I went for a single page design kinda like discord).
+  This component implements other components to render the channels and chat messages.
+  */
+
   public user;
   public selectedGroup;
   public selectedChannel;
@@ -25,7 +30,7 @@ export class HomeComponent implements OnInit {
   public allusers: any;
   public messageImage: any = null;
   constructor(private router: Router, private _groupService: GroupService, private _socketService: SocketService, private _imageService: ImageService, private _userService: UserService) { }
-
+  // checks if user is logged in the load info otherwise sends back to login
   ngOnInit() {
     if(sessionStorage.getItem('user') === null){
       // User has not logged in, reroute to login
@@ -49,7 +54,7 @@ export class HomeComponent implements OnInit {
       }
     }
   }
-
+  // uploads new profile image
   imageChanged(event) {
     const fd = new FormData();
     fd.append('image',event.target.files[0],event.target.files[0].name);
@@ -67,11 +72,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  //chat message image changed
   fileSelected(event) {
     console.log(event);
     this.messageImage = event.target.files[0];
   }
 
+  //send a message
   sendMessage(message) {
     console.log(message);
     if (this.messageImage) {
@@ -86,9 +93,8 @@ export class HomeComponent implements OnInit {
     } else {
       this._socketService.sendMessage(message, this.user.username, this.selectedGroup.name, null, this.user.profile);
     }
-
   }
-
+  // create a new group
   createGroup(event){
     event.preventDefault();
     let data = {
@@ -109,7 +115,7 @@ export class HomeComponent implements OnInit {
       }
     )
   }
-
+  //create a new channel
   createChannel(event){
     event.preventDefault();
     if (this.selectedGroup) {
@@ -133,7 +139,7 @@ export class HomeComponent implements OnInit {
       );
     }
   }
-
+  //delete a channel
   deleteChannel(channelName){
     this._groupService.deleteChannel(channelName, this.selectedGroup.name).subscribe(
       data=>{
@@ -151,7 +157,7 @@ export class HomeComponent implements OnInit {
       }
     )
   }
-
+  //update a user in groups or channels
   update(type, username, groupName, channelName) {
     let dataToSend = {
       'type': type,
@@ -186,7 +192,7 @@ export class HomeComponent implements OnInit {
     });
 
   }
-
+  //create a new user
   createUser(username, email, password) {
     let data = {
       'username': username,
@@ -205,7 +211,7 @@ export class HomeComponent implements OnInit {
 
     });
   }
-
+  //delete a user
   deleteUser(id) {
     this._userService.delete(id).subscribe((user) => {
       this._userService.getUsers().subscribe((data: any) => {
@@ -213,7 +219,7 @@ export class HomeComponent implements OnInit {
       });
     });
   }
-
+  // delete a group
   deleteGroup(groupName){
     this._groupService.deleteGroup(groupName).subscribe(
       data=>{
@@ -238,7 +244,7 @@ export class HomeComponent implements OnInit {
       }
     )
   }
-
+  // get all groups user is in
   getGroups(){
     let data = {
       'username': JSON.parse(sessionStorage.getItem('user')).username
@@ -254,22 +260,23 @@ export class HomeComponent implements OnInit {
       }
     )
   }
-  
+  // promote user to super
   promoteSuper(id) {
-  this._userService.promote(id, 2).subscribe((user) => {
-    this._userService.getUsers().subscribe((data: any) => {
-      this.allusers = data;
+    this._userService.promote(id, 2).subscribe((user) => {
+      this._userService.getUsers().subscribe((data: any) => {
+        this.allusers = data;
+      });
     });
-  });
-}
- demoteSuper(id) {
-  this._userService.promote(id, 0).subscribe((user) => {
-    this._userService.getUsers().subscribe((data: any) => {
-      this.allusers = data;
+  }
+  // demote user to normal user
+  demoteSuper(id) {
+    this._userService.promote(id, 0).subscribe((user) => {
+      this._userService.getUsers().subscribe((data: any) => {
+        this.allusers = data;
+      });
     });
-  });
-}
-
+  }
+  //logout of session
   logout(){
     this._socketService.signout();
     sessionStorage.clear();
