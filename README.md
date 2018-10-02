@@ -107,3 +107,13 @@ Routes: all under api/
     * returns: true if success else false
 
 ## Angular Architecture
+I used the provided angular project from Ryoma as a starting point which had home component be the main page which used chat component and channels component to decouple some of the view. Below is an overview on the angular project:
+* Services:
+    * group: this service allows the angular project to make api requests to perform CRUD actions on the databse. This service mainly deals with the groups collection.
+    * user: this service allows the angular project to make connection to the REST api to perform CRUB actions on the user collection. these include loggin in and updating users.
+    * socket: this service allows the angular project to use sockets to communicate realtime messages to the server and other clients. this deals with joining rooms and sending messages.
+* Components:
+    * login: this component acts as a whole page to provide a login point to the user.
+    * home: this component is the app itself (I went for a single page design kinda like discord). This component implements other components to render the channels and chat messages.
+    * chat: this component is a simple chat box that auto scrolls to bottom and allows the user to enter images and messages to send.
+    * channel: this component allows dynamic loading of the channels and enables linking functions to when the user clicks a channel.
