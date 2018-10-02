@@ -25,5 +25,73 @@ describe('MongoDB tests', function() {
     });
   });
   // API create user code
+  describe('Testing creatation of user', function() {
+    describe('Testing creatation of new user', function() {
+      it('should have stored the information correctly', function() {
+        let newUser = {
+          username: 'super',
+          email: 'super@super.com',
+          password: '1234',
+          permissions: 2
+        }
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+          db.collection("users").insertOne(newUser, (err, res) => {
+            assert.equal(null, err);
+            db.collection("users").findOne({username: newUser.username}, (err, user) => {
+              assert.equal(user.username, newUser.username);
+              assert.equal(user.email, newUser.email);
+              assert.equal(user.password, newUser.password);
+              assert.equal(user.permissions, newUser.permissions);
+              client.close();
+            });
+          });
+        });
+      });
+    });
+
+    describe('Testing creatation of exsisting user', function() {
+      it('should have errored and not created new user', function() {
+        let newUser = {
+          username: 'super',
+          email: 'super@super.com',
+          password: '1234',
+          permissions: 2
+        }
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+          db.collection("users").findOne({username: newUser.username}, (err, user) => {
+            assert.equal(null, user);
+            client.close();
+          });
+        });
+      });
+    });
+
+    describe('Testing getting all users', function() {
+      it('should have no errors and get all users', function() {
+        let user = {
+          username: 'super',
+          email: 'super@super.com',
+          password: '1234',
+          permissions: 2
+        }
+
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+          db.collection("users").find({}).toArray((err, users) => {
+            assert.equal(null, err);
+            //Make sure the one user is stored
+            assert.equal(user.username, users[0].username);
+            assert.equal(user.email, users[0].email);
+            assert.equal(user.password, newUsusers[0].password);
+            assert.equal(user.permissions, users[0].permissions);
+            client.close();
+          });
+        });
+      });
+    });
+  });
+
   
 });
