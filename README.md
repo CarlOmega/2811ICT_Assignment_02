@@ -41,9 +41,9 @@ The database consists of two collections:
 
 ## REST API
 Routes: all under api/
-* login:
- * describtion:
- * parameters:
- * returns:
+ * login:
+  * describtion:
+  * parameters:
+  * returns:
 
 ## Angular Architecture
