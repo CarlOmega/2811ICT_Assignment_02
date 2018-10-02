@@ -42,10 +42,6 @@ app.get('/home', function(req,res){
   res.sendFile(path.join(__dirname,'../chat-app/dist/chat-app/index.html'));
 });
 
-// Login Module
-const login = require('./login.js')();
-const groups = require('./groups.js')();
-
 app.post('/api/login', function(req, res){
   let username = req.body.username;
   let password = req.body.password;
