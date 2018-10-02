@@ -95,7 +95,7 @@
           <div class="card-body" style="height: 500px; overflow-y:scroll">
             <ng-container *ngIf="selectedChannel != null" >
                 <p *ngFor="let member of users" class="text-success">
-                  {{ member }}
+                  {{ member.toUpperCase() }}
                 </p>
             </ng-container>
           </div>

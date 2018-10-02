@@ -12,7 +12,7 @@
 
   <div *ngIf="channel != null">
     <h3 class="card-header">{{channel ? channel.name : Chat}}</h3>
-    <div class="card-body" style="height: 500px; overflow-y:scroll" #chat id="chat">
+    <div class="card-body" style="height: 400px; overflow-y:scroll" #chat id="chat">
       <div *ngFor="let message of messages">
         <div class="card"  style="width: 100%;">
           <div *ngIf="message.photo">
@@ -32,7 +32,7 @@
   </div>
 
 
-  <div class="card-footer text-muted">
+  <div class="card-footer text-muted" style="height: 100px">
     <div class="form-inline">
       <input type="file" (change)="fileSelected($event)" name="myFile" accept="image/*">
       <input class="form-control" [(ngModel)]="message" [disabled]="channel == null" style="width:calc(100% - 100px)">
