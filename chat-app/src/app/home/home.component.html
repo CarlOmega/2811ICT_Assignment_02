@@ -95,7 +95,7 @@
           <div class="card-body" style="height: 500px; overflow-y:scroll">
             <ng-container *ngIf="selectedChannel != null" >
                 <p *ngFor="let member of users" class="text-success">
-                  {{ member.toUpperCase() }}
+                  -{{ member.toUpperCase() }}
                 </p>
             </ng-container>
           </div>
@@ -109,7 +109,7 @@
       <div class="col-lg-2" style="padding:0px">
         <div *ngIf="selectedGroup && selectedGroup.role > 0">
           <div class="card mb-3" style="padding:10px">
-            <h3 class="card-header">Group Settings</h3>
+            <h4 class="card-header">Group Settings</h4>
             <div class="card-body" style="height: 470px; overflow-y:scroll">
               <h4>{{selectedGroup.name}}</h4>
               <h6>All Members</h6>
@@ -143,7 +143,7 @@
       <!-- Channels Column -->
       <div class="col-lg-2" style="padding:0px">
         <div class="card mb-4" style="padding:10px" *ngIf="selectedChannel && selectedGroup.role > 0">
-          <h3 class="card-header">Channel Settings</h3>
+          <h4 class="card-header">Channel Settings</h4>
           <div class="card-body" style="height: 470px; overflow-y:scroll">
             <h4>{{selectedChannel.name}}</h4>
             <h6>People who can see</h6>
@@ -169,7 +169,7 @@
 
       <div class="col-lg-8" style="padding:0px">
         <div class="card mb-4" style="padding:10px" *ngIf="user.permissions > 1">
-          <h3 class="card-header">User Settings</h3>
+          <h4 class="card-header">User Settings</h4>
           <div class="card-body" style="height: 500px; overflow-y:scroll">
             <form (submit)="createUser(username.value, email.value, password.value)">
               <div class="form-group">
