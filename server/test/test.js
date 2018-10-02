@@ -26,7 +26,7 @@ describe('MongoDB tests', function() {
   });
   // API create user code
   describe('Testing creatation of user', function() {
-    describe('Testing creatation of new user', function() {
+    describe('Testing creatation of new user C', function() {
       it('should have stored the information correctly', function() {
         let newUser = {
           username: 'super',
@@ -68,7 +68,7 @@ describe('MongoDB tests', function() {
       });
     });
 
-    describe('Testing getting all users', function() {
+    describe('Testing getting all users R', function() {
       it('should have no errors and get all users', function() {
         let user = {
           username: 'super',
@@ -131,7 +131,7 @@ describe('MongoDB tests', function() {
   });
 
 
-  describe('Testing creatation of group', function() {
+  describe('Testing creatation of group C', function() {
     describe('Testing creatation of new group', function() {
       it('should have no errors and correctly stored data', function() {
         let newGroup = {
@@ -175,7 +175,7 @@ describe('MongoDB tests', function() {
   });
 
 
-  describe('Testing creatation of channel', function() {
+  describe('Testing creatation of channel C U', function() {
     describe('Testing creatation of new channel', function() {
       it('should have no errors and correctly stored data', function() {
         let groupName = 'Group 01';

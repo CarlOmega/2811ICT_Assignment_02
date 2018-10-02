@@ -214,6 +214,22 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  promoteSuper(id) {
+    this._userService.promote(id, 2).subscribe((user) => {
+      this._userService.getUsers().subscribe((data: any) => {
+        this.allusers = data;
+      });
+    });
+  }
+
+  demoteSuper(id) {
+    this._userService.promote(id, 0).subscribe((user) => {
+      this._userService.getUsers().subscribe((data: any) => {
+        this.allusers = data;
+      });
+    });
+  }
+
   deleteGroup(groupName){
     this._groupService.deleteGroup(groupName).subscribe(
       data=>{

@@ -41,4 +41,13 @@ export class UserService {
   delete(id){
     return this.http.delete(this.api + 'user/delete/' + id);
   }
+
+  promote(id, type){
+    let data = {
+      'id': id,
+      'type': type
+    };
+    let body = JSON.stringify(data);
+    return this.http.post(this.api + 'user/promote/', body, httpOptions);
+  }
 }

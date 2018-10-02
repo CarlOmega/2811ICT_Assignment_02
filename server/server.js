@@ -397,6 +397,29 @@ app.post('/api/user/change', function(req, res){
   });
 });
 
+app.post('/api/user/promote', function(req, res){
+    let id = req.body.id;
+    let type = req.body.type;
+    mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      }
+      // Connected now setup db for query
+    	const db = client.db(dbName);
+      db.collection("users").updateOne({_id: new mongodb.ObjectId(id)}, {$set: {permissions: type}}, (err, user) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
+        }
+        console.log(user);
+        res.send(true);
+        client.close();
+      });
+    });
+});
+
+
 app.delete('/api/user/delete/:id', function(req, res){
     let id = req.params.id;
     mongodb.MongoClient.connect(url, {poolSize:10}, (err, client) => {

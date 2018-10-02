@@ -183,7 +183,12 @@
             </form>
             <h6>All Users</h6>
             <ul class="list-group" *ngFor="let member of allusers">
-              <li class="list-group-item list-group-item-info"><button class="btn btn-outline-danger" (click)=deleteUser(member._id) type="button">delete</button>{{member.username}} | {{member.email}}</li>
+              <li class="list-group-item list-group-item-info">
+                <button class="btn btn-outline-danger" (click)=deleteUser(member._id) type="button">Delete</button>
+                <button *ngIf="member.permissions != 2" class="btn btn-outline-success" (click)="promoteSuper(member._id)" type="button">Promote</button>
+                <button *ngIf="member.permissions == 2" class="btn btn-outline-info" (click)="demoteSuper(member._id)" type="button">Demote</button>
+                {{member.username}} | {{member.email}}
+              </li>
             </ul>
           </div>
         </div>
