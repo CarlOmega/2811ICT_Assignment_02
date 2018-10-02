@@ -14,5 +14,16 @@ describe('MongoDB tests', function() {
   });
 
   //Connection code
-
+  describe('Testing connecting to server', function() {
+    it('should have no errors', function() {
+      mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+        const db = client.db(dbName);
+        assert.equal(null, err);
+        assert.notEqual(null, db);
+        client.close();
+      });
+    });
+  });
+  // API create user code
+  
 });
