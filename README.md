@@ -41,7 +41,67 @@ The database consists of two collections:
 
 ## REST API
 Routes: all under api/
-* login:
+* POST login:
+    * describtion:
+    * parameters:
+    * returns:
+
+* POST upload:
+    * describtion:
+    * parameters:
+    * returns:
+    
+* POST user/changeimage:
+    * describtion:
+    * parameters:
+    * returns:
+
+* GET getusers:
+    * describtion:
+    * parameters:
+    * returns:
+    
+* GET groups:
+    * describtion:
+    * parameters:
+    * returns:
+
+* DELETE group/delete:
+    * describtion:
+    * parameters:
+    * returns:
+
+* DELETE channel/delete:
+    * describtion:
+    * parameters:
+    * returns:
+
+* POST group/create:
+    * describtion:
+    * parameters:
+    * returns:
+  
+* POST channel/create:
+    * describtion:
+    * parameters:
+    * returns:
+
+* POST user/create:
+    * describtion:
+    * parameters:
+    * returns:
+
+* POST user/change:
+    * describtion:
+    * parameters:
+    * returns:
+
+* POST user/promote:
+    * describtion:
+    * parameters:
+    * returns:
+
+* DELETE user/delete:
     * describtion:
     * parameters:
     * returns:
