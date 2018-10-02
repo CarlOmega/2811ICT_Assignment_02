@@ -93,5 +93,127 @@ describe('MongoDB tests', function() {
     });
   });
 
-  
+  //login tests
+  describe('Testing login of user', function() {
+    describe('Testing correct password of user', function() {
+      it('should have no errors', function() {
+        let testUser = {
+          username: 'super',
+          password: '1234',
+        }
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+
+          db.collection("users").findOne({username: testUser.username}, (err, user) => {
+            assert.equal(testUser.password, user.password);
+            client.close();
+          });
+        });
+      });
+    });
+
+    describe('Testing incorrect password of user', function() {
+      it('should have errors', function() {
+        let user = {
+          username: 'super',
+          password: '12421',
+        }
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+
+          db.collection("users").findOne({username: testUser.username}, (err, user) => {
+            assert.notEqual(testUser.password, user.password);
+            client.close();
+          });
+        });
+      });
+    });
+  });
+
+
+  describe('Testing creatation of group', function() {
+    describe('Testing creatation of new group', function() {
+      it('should have no errors and correctly stored data', function() {
+        let newGroup = {
+          name: 'Group 01',
+          admins: ['super'],
+          members: ['super'],
+          channels: []
+        };
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+          db.collection("groups").insertOne(newGroup, (err, result) => {
+            assert.equal(null, err);
+            db.collection("groups").findOne({name: newGroup.name}, (err, group) => {
+              assert.equal(group.name, newGroup.name);
+              assert.equal(group.admins, newGroup.admins);
+              assert.equal(group.members, newGroup.members);
+              assert.equal(group.channels, newGroup.channels);
+              client.close();
+            });
+          });
+        });
+      });
+    });
+    describe('Testing creatation of exsisting group', function() {
+      it('should have errors', function() {
+        let newGroup = {
+          name: 'Group 01',
+          admins: ['super'],
+          members: ['super'],
+          channels: []
+        };
+        mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+          const db = client.db(dbName);
+          db.collection("groups").findOne({name: newGroup.name}, (err, group) => {
+            assert.equal(null, group);
+            client.close();
+          });
+        });
+      });
+    });
+  });
+
+
+  describe('Testing creatation of channel', function() {
+    describe('Testing creatation of new channel', function() {
+      it('should have no errors and correctly stored data', function() {
+        let groupName = 'Group 01';
+        let newChannel = {
+           name: 'Channel 01',
+           members: ['super'],
+           history: []
+         };
+         mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+           const db = client.db(dbName);
+           db.collection("groups").updateOne({'name': groupName} , {$push: {channels: newChannel}}, (err, result) => {
+             assert.equal(null, err);
+             db.collection("groups").findOne({'name': groupName, "channels.name": newChannel.name}, (err, channel) => {
+               assert.equal(channel.name, newChannel.name);
+               assert.equal(channel.members, newChannel.members);
+               assert.equal(channel.history, newGroup.history);
+               client.close();
+             });
+           });
+         });
+      });
+    });
+    describe('Testing creatation of exsisting channel', function() {
+      it('should have errors', function() {
+        let groupName = 'Group 01';
+        let newChannel = {
+           name: 'Channel 01',
+           members: ['super'],
+           history: []
+         };
+         mongodb.MongoClient.connect(url, {useNewUrlParser: true }, {poolSize:10}, (err, client) => {
+           const db = client.db(dbName);
+           db.collection("groups").findOne({'name': groupName, "channels.name": channelName}, (err, channel) => {
+             assert.equal(null, channel);
+             client.close();
+           });
+         });
+      });
+    });
+  });
 });
